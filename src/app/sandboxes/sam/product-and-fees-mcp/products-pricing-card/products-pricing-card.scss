@@ -1,0 +1,328 @@
+@use '../../product-and-fees/styles/variables' as *;
+
+// Figma "bg/default/screen" — table header fill on the Products & Pricing grid.
+// No matching value in @exos/exos-theme-external tokens.
+$color-surface-screen: #edf1f7;
+
+// Breakpoints from the Figma mock bands (Sams-Vibe 683:*):
+//   ≤767   stacked list     (683:9470 / 683:9691)
+//   768–933 transposed grid (683:9260 / 683:9365) – products as rows, counties as columns
+//   ≥934   grid             (683:8976 → 683:8835) – counties as rows, products as columns
+$bp-tablet: 768px;
+$bp-desktop: 934px;
+
+// Figma geometry (no matching spacing tokens in exos-theme-external)
+$county-col-width: 134px;
+$product-col-width-transposed: 178px;
+$county-col-min-transposed: 190px;
+$fee-input-width: 101px;
+$fee-input-height: 44px;
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.card.products-pricing-card {
+  width: 100%;
+  background: $card-background-gradient;
+  border: none;
+  border-radius: 12px;
+  box-shadow: $card-box-shadow;
+  margin: 0;
+  padding: 20px 16px;
+
+  @media (min-width: $bp-tablet) {
+    padding: 32px;
+  }
+
+  .card-header {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 20px;
+
+    @media (min-width: $bp-tablet) {
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: $color-text-primary;
+      margin: 0;
+
+      @media (min-width: $bp-tablet) {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @media (min-width: $bp-tablet) {
+      gap: 20px;
+    }
+  }
+
+  .card-footer {
+    background: transparent;
+    border-top: 1px solid $color-border-lighter;
+    padding: 20px 0 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .btn {
+      width: 100%;
+    }
+
+    @media (min-width: $bp-tablet) {
+      margin-top: 32px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .btn {
+        width: auto;
+        min-width: 125px;
+      }
+    }
+  }
+}
+
+// ── Banner (existing markup, restyled) ─────────────────────────────────────
+.product-and-fees-banner {
+  display: flex;
+  gap: 8px;
+  border: 1px solid $color-action-primary;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 0;
+
+  .icon-info-circle-fill {
+    color: $color-action-primary;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .text {
+    display: block; // theme lays .banner .text out as a flex row
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 21px;
+    color: $color-text-secondary;
+
+    @media (min-width: $bp-tablet) {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+}
+
+// ── Grid (≥768) ────────────────────────────────────────────────────────────
+.pricing-table-scroll {
+  display: none;
+
+  @media (min-width: $bp-tablet) {
+    display: block;
+    overflow-x: auto;
+    border: 1px solid $color-border-lighter;
+    border-radius: 8px;
+  }
+}
+
+.pricing-table {
+  display: grid;
+  // 1px gaps over a border-coloured fill draw every inner divider in both orientations.
+  gap: 1px;
+  background: $color-border-lighter;
+  grid-auto-flow: row;
+  grid-template-columns: $county-col-width repeat(var(--product-count), minmax(0, 1fr));
+
+  // Transpose: same DOM order, filled column-first.
+  @media (min-width: $bp-tablet) and (max-width: $bp-desktop - 1) {
+    grid-auto-flow: column;
+    grid-template-rows: repeat(var(--row-count), auto);
+    grid-template-columns: $product-col-width-transposed;
+    grid-auto-columns: minmax($county-col-min-transposed, 1fr);
+  }
+}
+
+.cell {
+  background: $color-surface-white;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 21px;
+  color: $color-text-secondary;
+}
+
+.cell--corner {
+  background: $color-surface-screen;
+  font-size: 12px;
+  font-weight: 700;
+
+  @media (min-width: $bp-tablet) and (max-width: $bp-desktop - 1) {
+    .corner-label {
+      display: none;
+    }
+  }
+}
+
+.cell--product {
+  background: $color-surface-screen;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 10px;
+  text-align: center;
+
+  @media (min-width: $bp-tablet) and (max-width: $bp-desktop - 1) {
+    background: $color-surface-white;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+.cell--county {
+  @media (min-width: $bp-tablet) and (max-width: $bp-desktop - 1) {
+    background: $color-surface-screen;
+    justify-content: center;
+  }
+}
+
+.cell--fee {
+  justify-content: center;
+}
+
+.product-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  color: $color-text-secondary;
+
+  .icon-info-circle {
+    color: $color-action-primary;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+}
+
+.form-check-input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+// ── Fee input (existing county-fee-input markup, restyled) ─────────────────
+.pricing-fee-input {
+  width: $fee-input-width;
+  height: $fee-input-height;
+  flex: none;
+  flex-wrap: nowrap;
+
+  .input-group-text {
+    background-color: $color-surface-light;
+    border-color: $color-border-primary;
+    border-radius: 4px 0 0 4px;
+    color: $color-text-primary;
+    font-size: 16px;
+    padding: 0 12px;
+  }
+
+  .form-control {
+    border-color: $color-border-primary;
+    border-radius: 0 4px 4px 0;
+    background-color: $color-surface-white;
+    color: $color-text-primary;
+    font-size: 16px;
+    text-align: right;
+    padding: 0 10px;
+    min-width: 0;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+// ── Stacked list (≤767) ────────────────────────────────────────────────────
+.pricing-list {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: $bp-tablet) {
+    display: none;
+  }
+}
+
+.pricing-product {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  & + & {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid $color-border-lighter;
+  }
+}
+
+.pricing-product-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 0;
+  cursor: pointer;
+
+  .form-check-input {
+    margin-top: 2px;
+  }
+
+  .pricing-product-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 21px;
+    color: $color-text-primary;
+  }
+
+  .pricing-product-desc {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 18px;
+    color: $color-text-tertiary;
+  }
+}
+
+.pricing-product-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 21px;
+  color: $color-text-secondary;
+
+  .pricing-fee-input {
+    width: 99.5px;
+  }
+}

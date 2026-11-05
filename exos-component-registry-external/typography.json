@@ -1,0 +1,100 @@
+{
+  "id": "exos-typography",
+  "component": "Typography",
+  "element": null,
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/main.scss",
+      "src/scss/exos-theme/_type.scss",
+      "src/scss/mixins/_fonts.scss"
+    ]
+  },
+  "description": "Type-scale and text utility classes for @exos/exos-theme-external. This theme ships a WIDER font-size scale than a standard exos theme: every size has BOTH a t-* and an equivalent fs-* alias, ranging from t-10/fs-10 (0.625rem) up to t-24/fs-24 (1.5rem) — note the extras t-10, t-20 and t-24 beyond the usual t-12..t-18. Headings h1–h4 are weight 700 and map onto the same scale. Also includes the `small-bolded-text` label utility (uppercase, weight 700, 10px) and a handful of literal semantic text/background color utilities defined in main.scss. Apply a size class to any text-bearing element; it is purely presentational.",
+  "baseClass": null,
+  "tokens": {
+    "font-size-xx-sm": "0.625rem",
+    "font-size-x-sm": "0.75rem",
+    "font-size-sm": "0.875rem",
+    "font-size-md": "1rem",
+    "font-size-lg": "1.125rem",
+    "font-size-x-lg": "1.25rem",
+    "font-size-xx-lg": "1.5rem",
+    "heading-font-weight": 700
+  },
+  "rules": {
+    "always": [
+      "Apply exactly one size class (t-* OR its fs-* alias) per element.",
+      "Prefer semantic heading tags (h1–h4) for document structure; reach for t-*/fs-* only for non-heading text or to override a heading's visual size."
+    ],
+    "never": [
+      "Do not combine two size classes on the same element (e.g. `t-14 t-16`).",
+      "Do not invent intermediate sizes — only the literal t-10/12/14/16/18/20/24 (and fs-* aliases) exist."
+    ]
+  },
+  "a11y": [
+    "Do not rely on font size alone to convey hierarchy; use proper heading levels for screen-reader structure.",
+    "Color utilities like text-white must keep sufficient contrast against their background."
+  ],
+  "axes": {
+    "size": {
+      "description": "Font-size step. Each value has an equivalent `fs-*` alias (e.g. t-16 == fs-16). Pick one.",
+      "type": "class",
+      "options": {
+        "t-10": { "class": "t-10", "origin": "exos", "note": "0.625rem. Alias: fs-10. Smallest caption / micro text." },
+        "t-12": { "class": "t-12", "origin": "exos", "note": "0.75rem. Alias: fs-12." },
+        "t-14": { "class": "t-14", "origin": "exos", "note": "0.875rem. Alias: fs-14. Default body size in this theme." },
+        "t-16": { "class": "t-16", "origin": "exos", "note": "1rem. Alias: fs-16." },
+        "t-18": { "class": "t-18", "origin": "exos", "note": "1.125rem. Alias: fs-18." },
+        "t-20": { "class": "t-20", "origin": "exos", "note": "1.25rem. Alias: fs-20. Extra vs standard exos theme." },
+        "t-24": { "class": "t-24", "origin": "exos", "note": "1.5rem. Alias: fs-24. Largest step; extra vs standard exos theme." }
+      }
+    },
+    "alias": {
+      "description": "The fs-* aliases that mirror the t-* scale 1:1 (same font-size). Use either family interchangeably.",
+      "type": "class",
+      "options": {
+        "fs-10": { "class": "fs-10", "origin": "exos", "note": "Alias of t-10." },
+        "fs-12": { "class": "fs-12", "origin": "exos", "note": "Alias of t-12." },
+        "fs-14": { "class": "fs-14", "origin": "exos", "note": "Alias of t-14." },
+        "fs-16": { "class": "fs-16", "origin": "exos", "note": "Alias of t-16." },
+        "fs-18": { "class": "fs-18", "origin": "exos", "note": "Alias of t-18." },
+        "fs-20": { "class": "fs-20", "origin": "exos", "note": "Alias of t-20." },
+        "fs-24": { "class": "fs-24", "origin": "exos", "note": "Alias of t-24." }
+      }
+    },
+    "treatment": {
+      "description": "Special text treatment utilities.",
+      "type": "class",
+      "options": {
+        "default": null,
+        "small-bolded": { "class": "small-bolded-text", "origin": "exos", "note": "Uppercase, weight 700, 0.625rem, letter-spaced — used for small labels/eyebrows." }
+      }
+    },
+    "color": {
+      "description": "Literal semantic text-color utilities defined in main.scss (NOT a bootstrap generator — only these two exist literally).",
+      "type": "class",
+      "options": {
+        "default": null,
+        "white": { "class": "text-white", "origin": "exos", "note": "color: white. For text on dark/gradient backgrounds." },
+        "tertiary": { "class": "text-teritary", "origin": "exos", "note": "Tertiary text color. NOTE the source spelling is 'teritary' (typo preserved from the theme)." }
+      }
+    }
+  },
+  "structure": null,
+  "examples": [
+    { "name": "Body text", "intent": "Default paragraph text in this theme.", "html": "<p class=\"t-14\">Your application has been submitted for review.</p>" },
+    { "name": "Section label / eyebrow", "intent": "Small uppercase label above a heading or field group.", "html": "<span class=\"small-bolded-text\">Account details</span>" },
+    { "name": "Large emphasized number", "intent": "Prominent stat or figure on a dashboard card.", "html": "<span class=\"t-24\">1,248</span>" },
+    { "name": "Caption", "intent": "Micro helper text under a control.", "html": "<small class=\"t-10\">Updated 2 minutes ago</small>" },
+    { "name": "fs-* alias", "intent": "Use the fs-* family interchangeably with t-*.", "html": "<span class=\"fs-16\">Standard label</span>" },
+    { "name": "Text on dark background", "intent": "White text sitting on a gradient or dark surface.", "html": "<span class=\"t-18 text-white\">Welcome back</span>" }
+  ],
+  "inference": [
+    { "when": ["body", "paragraph", "default text"], "use": { "size": "t-14" } },
+    { "when": ["caption", "micro", "timestamp", "smallest"], "use": { "size": "t-10" } },
+    { "when": ["label", "eyebrow", "small bold uppercase"], "use": { "treatment": "small-bolded" } },
+    { "when": ["large number", "stat", "big figure"], "use": { "size": "t-24" } },
+    { "when": ["text on dark", "white text", "on gradient"], "use": { "color": "white" } }
+  ]
+}
