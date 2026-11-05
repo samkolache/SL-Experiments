@@ -1,0 +1,16 @@
+@for (feeRow of feeRows(); track feeRow.id; let i = $index) {
+<div class="product-row" role="group" [attr.aria-label]="displayText()">
+  <span class="product-row-label">{{ feeRow.name }}</span>
+  <div class="product-row-boxes">
+    <div class="product-row-col">
+      <div class="input-group product-row-fee-input" [class.checked]="feeRow?.isEnabled ?? true">
+        <span class="input-group-text">
+          <input type="checkbox" class="form-check-input" (change)="onEnabledChange(feeRow, $event)" [checked]="feeRow?.isEnabled ?? true" />
+        </span>
+        <span class="input-group-text__dollar">$</span>
+        <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount" [disabled]="!(feeRow?.isEnabled ?? false)" (input)="feeRow && onFeeInput(feeRow, $event)" (wheel)="$any($event.target).blur()" [value]="feeRow?.fee ?? ''"
+         [attr.aria-label]="displayText() + ' fee'"></div>
+    </div>    
+  </div>
+</div>
+}

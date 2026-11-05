@@ -1,0 +1,227 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+:host {
+  --dt-cell-px: 12px;
+  --dt-header-text: #687885;
+  --dt-bg: #{$white};
+  --dt-header-bg: var(--dt-bg);   // no tint, but opaque so rows don't show through the sticky header
+  --dt-stripe-bg: #fafbfc;
+  --dt-border: #{$border-color};
+
+  display: block;
+  background: var(--dt-bg);
+  border: $border-width solid var(--dt-border);
+  border-radius: $border-radius;
+}
+
+// For action links in cell templates — a button styled as a link.
+:host ::ng-deep .dt-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: $primary;
+  text-decoration: underline;
+}
+
+.dt {
+
+  &__toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacer;
+    padding: $spacer;
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: $text-muted;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacer * .5;
+    flex-shrink: 0;
+  }
+
+  &__frame {
+    position: relative;
+  }
+
+  &__scroll {
+    overflow: auto;
+
+    &:focus-visible {
+      outline: 2px solid $primary;
+      outline-offset: -2px;
+    }
+  }
+
+  &__table {
+    table-layout: fixed;          // makes the colgroup widths authoritative
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;    // collapsed borders vanish on sticky cells
+    border-spacing: 0;
+
+    // Backgrounds live on cells, not rows, so pinned cells stay opaque.
+    th,
+    td {
+      padding: var(--dt-cell-px);
+      background: var(--dt-bg);
+      border-bottom: $border-width solid var(--dt-border);
+      box-shadow: none;
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 8px var(--dt-cell-px);
+      background: var(--dt-header-bg);
+      vertical-align: top;
+      font-size: 10px;
+      font-weight: $font-weight-bold;
+      color: var(--dt-header-text);
+      white-space: nowrap;
+      overflow-wrap: normal;
+    }
+
+    tbody tr:last-child > td {
+      border-bottom: 0;
+    }
+
+    .dt__row--odd > td {
+      background: var(--dt-stripe-bg);
+    }
+
+    // Layering: body 0, pinned body 1, header 2, pinned header 3.
+    .dt__sticky {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
+
+    thead .dt__sticky {
+      z-index: 3;
+    }
+
+    .dt__apply {
+      left: auto;
+      right: 0;
+      padding-left: 4px;
+      padding-right: 4px;
+      text-align: center;
+    }
+  }
+
+  // Header cells stack the label (with its sort caret) over the filter control.
+  &__label {
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
+    text-transform: uppercase;    // label only — filter inputs keep their case
+
+    .text-end > & { justify-content: flex-end; }
+    .text-center > & { justify-content: center; }
+  }
+
+  &__filter {
+    margin-top: .375rem;
+    font-weight: $font-weight-normal;
+  }
+
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    // Bootstrap's reboot resets these on buttons; match the plain labels.
+    text-transform: inherit;
+    letter-spacing: inherit;
+
+    span {
+      font-size: .75rem;
+      color: $gray-500;
+    }
+
+    &--active span {
+      color: $primary;
+    }
+  }
+
+  &__lead {
+    text-align: center;
+
+    .dt__label { justify-content: center; }
+
+    // Same height as a small filter input, so the checkbox centres against it.
+    .dt__filter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: $input-height-sm;
+    }
+
+    // Fixed size: Bootstrap sizes checkboxes in em, and the header's 10px
+    // font would otherwise shrink the select-all box. 16px matches LEAD_COLUMN_PX.
+    .form-check-input {
+      width: 16px;
+      height: 16px;
+      float: none;
+      margin: 0;
+    }
+  }
+
+  &__drag {
+    color: $gray-600;
+    cursor: grab;
+  }
+
+  &__chevron {
+    padding: 0;
+    border: 0;
+    background: none;
+    line-height: 1;
+    color: $primary;
+  }
+
+  &__truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__empty {
+    padding: $spacer * 2 !important;
+    text-align: center;
+    color: $text-muted;
+  }
+
+  &__body--loading {
+    opacity: .5;
+  }
+
+  &__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -1rem 0 0 -1rem;
+  }
+}

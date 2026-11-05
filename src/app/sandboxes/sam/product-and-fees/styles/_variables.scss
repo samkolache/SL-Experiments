@@ -1,0 +1,145 @@
+@use './color-tokens' as color;
+@forward './color-tokens';
+
+$card-background: rgba(color.$color-surface-white, 0.6);
+$upload-row-background: rgba(255, 255, 255, 0.50);
+// Card fill used by the onboarding step cards (add-license, my-info, licenses).
+$card-background-gradient: linear-gradient(180deg, #F2F8FD 4.52%, #FAFCFF 13.27%), rgba(255, 255, 255, 0.01);
+$card-box-shadow: 0 4px 34px rgba(color.$color-shadow-strong, 0.25);
+$modal-backdrop-background: rgba(255, 255, 255, 0.01);
+$modal-box-shadow: 0 8px 32px rgba(color.$color-text-primary, 0.2);
+$tooltip-box-shadow: 0 8px 24px rgba(color.$color-text-primary, 0.12);
+$input-focus-box-shadow: 0 0 0 2px rgba(color.$color-action-primary, 0.15);
+$loading-modal-backdrop-background: rgba(255, 255, 255, 0.01);
+$gradient-04: linear-gradient(39deg, color.$color-action-light 26.8%, color.$color-gradient-warm 95.4%);
+// Accent strip along the top edge of the sign-up / verify cards below md.
+$gradient-card-top: linear-gradient(90deg, color.$color-action-primary 0%, color.$color-accent-periwinkle 100%);
+
+// Onboarding step cards: tighter padding on mobile, opening up from md. Every
+// step card in the flow shares these values, so they live here instead of being
+// retyped per component.
+$card-padding-mobile: 24px 16px;
+$card-padding-md: 40px 28px 24px 28px;
+
+// Shared card background with gradient accent strip along the top edge.
+@mixin card-gradient-background {
+  background: $gradient-card-top, $card-background-gradient;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: 100% 5px, auto, auto;
+  border-top: 5px solid transparent;
+}
+
+// A raw media query rather than media-breakpoint-up(md) so this mixin does not
+// depend on Bootstrap's mixins being imported wherever it happens to be used.
+@mixin card-padding-responsive {
+  padding: $card-padding-mobile;
+
+  @media (min-width: 768px) {
+    padding: $card-padding-md;
+  }
+}
+
+// License list
+$camera-focus-ring-color: #2b6cb0;
+
+// My info upload row
+$upload-side-icon-focus-outline: rgba(color.$color-action-primary, 0.4);
+
+// My info modal
+$my-info-modal-backdrop-background: rgba(255, 255, 255, 0.01);
+$my-info-modal-panel-background: color.$color-surface-white;
+$my-info-modal-panel-shadow: 0 18px 48px rgba(15, 23, 42, 0.24);
+$my-info-modal-panel-focus-outline: rgba(29, 79, 145, 0.18);
+$my-info-modal-content-text-tertiary: color.$color-text-tertiary;
+
+// Mobile upload
+$mobile-upload-bg: #f3f7fb;
+$mobile-upload-card-bg: color.$color-surface-white;
+$mobile-upload-card-border: #d8e0e8;
+$mobile-upload-heading-text: #2a3d52;
+$mobile-upload-success: #146c2e;
+$mobile-upload-error: #b42318;
+$mobile-upload-primary: #0b69c7;
+$mobile-upload-on-primary: color.$color-surface-white;
+
+// Shared valuation UI colors
+$valuation-card-background: $card-background;
+$valuation-title-color: color.$color-neutral-700;
+$valuation-text-muted: color.$color-neutral-600;
+$valuation-text-disabled: color.$color-neutral-500;
+$valuation-border-light: color.$color-border-light;
+$valuation-border-card: color.$color-border-card;
+$valuation-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+// Shared button/status colors
+$valuation-action-primary: #2b6cb0;
+$valuation-action-primary-hover: #1e4d7b;
+$valuation-action-primary-soft: #eff6ff;
+$valuation-action-primary-soft-alt: #f0f7fd;
+$valuation-success-soft-bg: #dcfce7;
+$valuation-success-text: #166534;
+$valuation-danger-soft-bg: #fee2e2;
+$valuation-danger-text: #dc2626;
+$valuation-success-border: #1c7c35;
+$valuation-danger-border: #cc3115;
+$valuation-surface-lighter: #f7f8fa;
+$valuation-danger-deep: #b91c1c;
+
+// Recurring availability semantic color/shadow tokens
+$availability-card-bg: #a9d2a8;
+$availability-card-border: color.$color-green-50;
+$availability-status: color.$color-green-90;
+$availability-close-bg: #4f6278;
+$availability-close-bg-hover: #43556b;
+$availability-chip-text: #05152a;
+$availability-drag-bg: #8bcbf2;
+$availability-drag-border: #5e8ca9;
+$availability-chip-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+$availability-intro-checks-shadow: 0 1px 3px rgba(10, 54, 69, 0.25);
+$availability-intro-dot: #000;
+$availability-auto-accept-modal-bg: linear-gradient(31deg, #e4f2fe 26.8%, #fdf3e8 95.4%);
+$availability-auto-accept-modal-shadow: 0 4px 17px rgba(10, 54, 69, 0.25);
+$availability-auto-accept-modal-title: #05152a;
+$availability-auto-accept-settings-border: #d8dfe6;
+$availability-auto-accept-card-title: #05152a;
+$availability-auto-accept-card-description: #304258;
+$availability-auto-accept-switch-track: #cfd8dc;
+$availability-auto-accept-switch-knob-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+$availability-auto-accept-switch-track-active: #6ea535;
+$availability-card-accent-border: #2d7bc2;
+$availability-card-gradient-start: #f2f8fd;
+$availability-card-gradient-end: #fafcff;
+$availability-card-padding-desktop: 40px 28px 24px;
+$availability-card-shadow-mobile: 0 4px 14px rgba(color.$color-shadow-strong, 0.25);
+
+// Radio/selection component tokens
+$radio-option-hover-border: var(--bs-primary, #0d6efd);
+$radio-option-selected-bg: rgba(13, 110, 253, 0.04);
+$radio-description-color: color.$color-neutral-600;
+
+// Error alert tokens
+$error-alert-text: color.$color-error;
+$error-alert-bg: #fef2f2;
+$error-alert-border: #fecaca;
+
+// Shared mobile capture modal colors
+$capture-modal-backdrop-background: rgba(255, 255, 255, 0.01);
+$capture-modal-panel-background: color.$color-surface-white;
+$capture-modal-panel-shadow: 0 18px 48px rgba(15, 23, 42, 0.24);
+$capture-modal-panel-focus-outline: rgba(29, 79, 145, 0.18);
+$capture-modal-text-tertiary: color.$color-text-tertiary;
+
+// My info specific accents
+$my-info-question-number-background: color.$color-text-secondary;
+$my-info-icon-button-color: #1e6bd6;
+$my-info-icon-button-hover: #e8f1ff;
+
+// Ending-screen next-item cards: the wash behind each card's graphic. Selected
+// by the component's `variant` input, which also picks the graphic itself.
+$ending-card-gradient-w9: linear-gradient(159deg, rgba(232, 220, 201, 0.6) -6.4%, rgba(238, 220, 220, 0.6) 108.8%);
+$ending-card-gradient-ach: linear-gradient(152deg, rgba(245, 234, 204, 0.6) 13.8%, rgba(240, 235, 224, 0.6) 91.99%);
+$ending-card-gradient-parev: linear-gradient(159deg, rgba(231, 250, 247, 0.6) -6.4%, rgba(220, 226, 238, 0.6) 108.8%);
+$ending-card-gradient-geocom: linear-gradient(152deg, rgba(192, 228, 204, 0.6) -28.3%, rgba(234, 246, 242, 0.6) 103.99%);
+$ending-card-gradient-profile: linear-gradient(159deg, rgba(216, 207, 249, 0.6) -38.25%, rgba(220, 226, 238, 0.6) 86.11%);
+$ending-card-gradient-background: linear-gradient(156deg, rgba(183, 208, 246, 0.6) -33.37%, rgba(220, 226, 238, 0.6) 84.71%);

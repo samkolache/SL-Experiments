@@ -1,0 +1,24 @@
+<div class="product-row" [class.has-header]="showHeader()" role="group" [attr.aria-label]="displayText()">
+  <span class="product-row-label">{{ displayText() }}</span>
+  <div class="product-row-boxes">
+    @for (header of headers(); track header.key; let i = $index) {
+    @let fee = columns()[header.key];
+    <div class="product-row-col">
+      @if(!isLandInteriorGroup(displayText(), header.key))
+      {
+      @if (showHeader()) {
+      <span class="product-row-col-header">{{ header.displayName }}</span>
+      }
+      <div class="input-group product-row-fee-input" [class.checked]="fee?.isEnabled ?? true">
+        <span class="input-group-text">
+          <input type="checkbox" class="form-check-input" (change)="onEnabledChange(fee, $event)" [checked]="fee?.isEnabled ?? true" />
+        </span>
+        <span class="input-group-text__dollar">$</span>
+        <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount" [disabled]="!(fee?.isEnabled ?? false)" (input)="fee && onFeeInput(fee, $event)" (wheel)="$any($event.target).blur()" [value]="fee?.fee ?? ''"
+               [attr.aria-label]="displayText() + ' fee'">
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,13 @@
+@for (step of steps(); track step.label; let i = $index) {
+<button type="button" class="step-icon-container" [class.line-done]="i > 0 && steps()[i - 1].isFilled && step.isFilled" (click)="stepClick.emit(i)">
+  @if (step.isFilled) {
+    <img src="assets/images/step-icons/completed-icon.svg" class="step-icon-complete" alt="" aria-hidden="true" />
+  } @else if (step.img) {
+    <img [src]="'assets/images/step-icons/' + step.img + (i === activeIndex() ? '-selected' : '') + '.svg'"
+         class="step-icon-img" alt="" aria-hidden="true" />
+  } @else {
+    <span class="step-icon" [class]="step.icon" [class.active]="i === activeIndex()" aria-hidden="true"></span>
+  }
+  <span class="step-label">{{ step.label }}</span>
+</button>
+}

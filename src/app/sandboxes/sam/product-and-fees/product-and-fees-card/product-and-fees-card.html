@@ -1,0 +1,183 @@
+<div class="card product-and-fees-card">
+  <div class="card-header">
+    <h1>Confirm products and pricing</h1>
+  </div>
+  <div class="card-body">
+    <div class="banner banner-primary product-and-fees-banner" role="alert">
+        <span class="icon-info-circle-fill" aria-hidden="true"></span>
+        <div class="text">
+            <div>Products will be considered <span class="fw-bold">quote-only</span> if you don’t assign fees</div>
+        </div>
+    </div>
+    <!-- Core Products, Additional Products & Add-Ons -->
+    <div class="product-and-fees-section">
+      @for (productFeeSection of productFeeSections(); track $index) {
+      @if ($index > 0) {
+      <hr />
+      }
+      <div class="step-header">
+        <span aria-hidden="true" class="question-number">{{productFeeSection.displayOrder}}</span>
+        <div class="step-content">
+          <h2>{{productFeeSection.sectionName}}</h2>
+        </div>
+      </div>
+      @if (productFeeSection?.sectionId === "add-ons")
+      {
+      <div class="step-header">
+        <div class="banner banner-primary product-and-fees-banner" role="alert">
+          <span class="icon-info-circle-fill" aria-hidden="true"></span>
+          <div class="text">
+            <div>These amounts will be applied <span class="fw-bold">in addition</span> to the standard appraisal product fees you have entered above. If there is no additional charge for the considerations listed, please enter $0.</div>
+          </div>
+        </div>
+      </div>
+      }
+      <div class="product-section" [class.multi-column]="productFeeSection.sectionType === 'multiColumn'">
+
+        @if (productFeeSection.sectionType === "multiColumn")
+        {
+        <div class="product-section-header-row">
+          <span class="product-section-spacer"></span>
+          <div class="product-section-col-headers">
+            @for (inspectionType of productFeeSection.inspectionTypes ?? []; track inspectionType.key) {
+            <span>{{ inspectionType.displayName }}</span>
+            }
+          </div>
+        </div>
+        @for (row of productFeeSection.sections ?? []; track row.id; let i = $index)
+        {
+        <app-section-multi-column [displayText]="row.name" [code]="row.id" [columns]="row.fees"
+                                  [headers]="productFeeSection.inspectionTypes ?? []" [showHeader]="i === 0">
+        </app-section-multi-column>
+        }
+        }
+        @if (productFeeSection.sectionType === "single") {
+
+        <app-section-single [displayText]="productFeeSection.sectionName" [feeRows]="productFeeSection.fees ?? []">
+        </app-section-single>
+        }
+      </div>
+      }
+    </div>
+    <!-- Core Products, Additional Products & Add-Ons -->
+
+    <!-- County Exceptions -->
+    <hr>
+
+    <div class="step-header">
+      <span aria-hidden="true" class="question-number__align">4</span>
+      <div class="step-content">
+        <h2>County-Level Exceptions (Optional)</h2>
+        <p>You can either select <span class="fw-bold">(+)</span> for added fee or <span class="fw-bold">(-)</span> for
+          discounted fee</p>
+      </div>
+    </div>
+    @if (hasCoverageAreas())
+    {
+    <div class="county-exceptions">
+      @for (row of countyFees(); track row; let i = $index)
+      {
+      <div class="county-exception-row">
+        <!-- Dropdown for county select -->
+        <div class="county-select-wrap d-flex d-md-block align-items-center gap-4">
+          <div class="county-select">
+            <select class="form-select" [attr.aria-label]="'County ' + row" (change)="setCountyExceptionRow(row, $event)">
+              <option [value]="''" [selected]="!row?.county && !row?.state">{{ countyPlaceholder() }}</option>
+                @for (coverageArea of coverageAreas(); track coverageArea.countyName + '-' + coverageArea.state) {
+                  <option
+                    [value]="toCountyOptionValue(coverageArea.countyName, coverageArea.state)"
+                    [selected]="row?.county === coverageArea.countyName && row?.state === coverageArea.state"
+                    [disabled]="isCountySelectedInOtherRow(coverageArea.countyName,coverageArea.state, row)">
+                    {{ coverageArea.countyName }}-{{ coverageArea.state }}
+                  </option>
+                }
+            </select>
+          </div>
+          <button type="button" class="btn county-delete-btn d-md-none" title="Remove county"
+            [attr.aria-label]="'Remove county ' + (i + 1)" (click)="removeCountyException(row)">
+            <span class="icon-trash" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="county-fee-actions">
+          <div class="county-fee">
+            <div class="county-col">
+              <span class="county-col-header">INTERIOR</span>
+              <div class="county-controls">
+                <div class="btn-group county-tab-group" role="group" [attr.aria-label]="'Interior fee type ' + row">
+                  <button type="button" class="btn county-tab-btn" [class.active]="row?.interior?.adjustmentType === 'Add'"
+                    (click)="setFeeAdjustmentType(row, true, 'Add')">+</button>
+                  <button type="button" class="btn county-tab-btn" [class.active]="row?.interior?.adjustmentType === 'Subtract'"
+                    (click)="setFeeAdjustmentType(row, true, 'Subtract')">−</button>
+                </div>
+                <div class="input-group county-fee-input">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount" [attr.aria-label]="'Interior fee row ' + (i + 1)" (input)="row && setCountyFeeException(row, true, $event)" (wheel)="$any($event.target).blur()" [value]="row?.interior?.fee ?? ''">
+                </div>
+              </div>
+            </div>
+
+            <div class="county-col">
+              <span class="county-col-header">EXTERIOR</span>
+              <div class="county-controls">
+                <div class="btn-group county-tab-group" role="group" [attr.aria-label]="'Exterior fee type ' + row">
+                  <button type="button" class="btn county-tab-btn" [class.active]="row?.exterior?.adjustmentType === 'Add'"
+                    (click)="setFeeAdjustmentType(row, false, 'Add')">+</button>
+                  <button type="button" class="btn county-tab-btn" [class.active]="row?.exterior?.adjustmentType === 'Subtract'"
+                    (click)="setFeeAdjustmentType(row, false, 'Subtract')">−</button>
+                </div>
+                <div class="input-group county-fee-input">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount" [attr.aria-label]="'Exterior fee row ' + (i + 1)" (input)="row && setCountyFeeException(row, false, $event)" (wheel)="$any($event.target).blur()" [value]="row?.exterior?.fee ?? ''">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn county-delete-btn d-none d-md-flex" title="Remove county"
+            [attr.aria-label]="'Remove county ' + (i + 1)" (click)="removeCountyException(row)">
+            <span class="icon-trash" aria-hidden="true"></span>
+          </button>
+        </div>
+
+      </div>
+      }
+      <button type="button" class="btn county-add-btn" (click)="addCountyExceptionRow()">
+        <span class="icon-add" aria-hidden="true"></span>
+        ADD COUNTY
+      </button>
+    </div>
+    }
+    <!-- County Exceptions -->
+    <!-- Special Assignments-->
+    <hr>
+    <div class="step-header">
+      <span aria-hidden="true" class="question-number question-number--5-align">5</span>
+      <div class="step-content">
+        <h2>Select the specialized assignments you're interested in</h2>
+      </div>
+    </div>
+    <fieldset class="special-assignment-group">
+      <legend class="visually-hidden">Specialized assignments</legend>
+      <label class="checkbox-card">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          />
+        Builder/New Construction
+      </label>
+      <label class="checkbox-card">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          />
+        Custom and Complex Property
+      </label>
+    </fieldset>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-outline-primary" type="button">BACK</button>
+    <button class="btn btn-primary" type="button">CONTINUE</button>
+  </div>
+
+</div>

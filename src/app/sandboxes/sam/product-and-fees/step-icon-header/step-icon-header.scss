@@ -1,0 +1,105 @@
+@import '../styles/color-tokens';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import './step-icon-glyphs';
+
+:host {
+    // Consumers (e.g. milestone-sidebar) can override these on the host
+    // element to retune sizing/typography per instance without touching
+    // this component's internals.
+    --step-icon-size: 32px;
+    --step-icon-font-size: 22px;
+    --step-icon-mobile-size: 24px;
+    --step-icon-mobile-font-size: 16px;
+    --step-label-font-size: 14px;
+    --step-label-font-weight: 400;
+    --step-label-color: var(--exos-new-text-body-secondary);
+    --step-icon-label-gap: 8px;
+    --step-row-gap: 8px; // gap between step-icon-containers (either axis)
+
+    display: flex;
+    min-width: 0;
+}
+
+// Horizontal (default) — icons in a row, label under each icon, connector
+// line runs left-to-right through the vertical centre of the icons.
+:host(:not(.step-icon-header--vertical)) {
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--step-row-gap);
+    width: 100%;
+
+    .step-icon-container {
+        flex: 1 1 0;
+        flex-direction: column;
+        gap: var(--step-icon-label-gap);
+
+        &:not(:first-child)::before {
+            top: calc(var(--step-icon-size) / 2); // vertical centre of the icon
+            left: auto;
+            right: 50%;
+            bottom: auto;
+            width: calc(100% + var(--step-row-gap)); // reach prev centre (column width + the gap)
+            height: 2px;
+        }
+    }
+}
+
+// Vertical — icons stacked in a column, label beside each icon, connector
+// line runs top-to-bottom through the horizontal centre of the icons.
+:host(.step-icon-header--vertical) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--step-row-gap);
+
+    .step-icon-container {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: var(--step-icon-label-gap);
+
+        &:not(:first-child)::before {
+            top: auto;
+            left: calc(var(--step-icon-size) / 2); // horizontal centre of the icon
+            right: auto;
+            bottom: 100%;
+            width: 2px;
+            height: var(--step-row-gap); // reach prev centre (row gap)
+        }
+    }
+}
+
+.step-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:not(:first-child)::before {
+        content: "";
+        position: absolute;
+        display: var(--step-connector-display, block);
+        background: $color-border-light;
+        z-index: 0;
+    }
+
+    &.line-done:not(:first-child)::before {
+        background: $milestone-complete-icon;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--exos-new-primary);
+        outline-offset: 2px;
+    }
+
+    .step-label {
+        font-size: var(--step-label-font-size);
+        font-weight: var(--step-label-font-weight);
+        color: var(--step-label-color);
+        margin-bottom: 0;
+    }
+}

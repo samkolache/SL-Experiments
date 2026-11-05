@@ -1,0 +1,23 @@
+<aside class="sidebar">
+  <img src="assets/images/signup/logo.svg" width="156" height="33" alt="ServiceLink" class="sidebar-logo" />
+
+  <app-step-icon-header class="sidebar-steps" orientation="vertical" [steps]="steps()"
+    [activeIndex]="activeIndex()" />
+
+  <div class="sidebar-footer">
+    <button type="button" class="sidebar-footer-row" (click)="onHelpClick()">
+      <span class="icon-question-circle sidebar-footer-icon text-primary" aria-hidden="true"></span>
+      Help
+    </button>
+    <button type="button" class="sidebar-footer-row">
+      <span class="icon-home sidebar-footer-icon text-primary" aria-hidden="true"></span>
+      Progress Dashboard
+    </button>
+    <button type="button" class="sidebar-footer-row">
+      <span class="icon-box-arrow-right text-primary sidebar-footer-icon" aria-hidden="true"></span>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<app-help-modal />

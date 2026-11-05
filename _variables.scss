@@ -1,0 +1,580 @@
+@use "sass:map";
+
+:root {
+  --form-group-margin-bottom: 1.25rem;
+  --form-grid-gutter-width: 0.625rem;
+}
+
+// defining theme colors
+$primary: #066dce;
+$secondary: #4a5c6c;
+$dark: #0a2845;
+$success: #1c7c35;
+$danger: #cc3115;
+$warning: #f9a824;
+
+// used as background color for dark navigation
+$navigation-background-color: $dark !default;
+
+// adding bootstrap related maps and definitions
+// adding the defined colors in theme map. These colors have been defined in the variables file
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "dark": $dark,
+  "success": $success,
+  "danger": $danger,
+  "warning": $warning
+);
+
+// defining body background color
+$body-bg: #edf1f7;
+$body-background-color: $body-bg;
+$screen: $body-background-color;
+
+// defining addition colors
+$gray-1: #66747f;
+$gray-2: #85919e;
+$gray-3: #c6ccd2;
+$gray-4: #f0f2f5;
+$gray-5: #f7f8fa;
+
+// adding the defined gray colors in theme map.
+$gray-colors: (
+  "gray-1": $gray-1,
+  "gray-2": $gray-2,
+  "gray-3": $gray-3,
+  "gray-4": $gray-4,
+  "gray-5": $gray-5
+);
+
+// defining lighter theme colors
+$primary-light: #e4f2fe;
+$primary-lighter: #eff7fe;
+// $primary-lightest: #f0fcff;
+$success-light: #effde1;
+$success-lighter: #f6fde5;
+// $success-lightest: #fafff0;
+$danger-light: #feeae6;
+$danger-lighter: #fff0f0;
+// $danger-lightest: #fff0f0;
+$warning-light: #feeed3;
+$warning-lighter: #fff4e1;
+// $warning-lightest: #fff4e1;
+$secondary-light: $gray-4;
+$secondary-lighter: $gray-5;
+
+// adding the light and lighter gray colors in theme map.
+$light-and-lighter-colors: (
+  "primary-light": $primary-light,
+  "primary-lighter": $primary-lighter,
+  "success-light": $success-light,
+  "success-lighter": $success-lighter,
+  "danger-light": $danger-light,
+  "danger-lighter": $danger-lighter,
+  "warning-light": $warning-light,
+  "warning-lighter": $warning-lighter,
+  "secondary-light": $secondary-light,
+  "secondary-lighter": $secondary-lighter
+);
+
+// defaulting bootstrap's default border grey
+$gray-300: $gray-2;
+
+// theme text color and lighter background color
+$theme-color-with-lighter-background:
+  "primary" $primary $primary-lighter,
+  "success" $success $success-lighter,
+  "danger" $danger $danger-lighter,
+  "warning" $secondary $warning-lighter,
+  "secondary" $secondary $secondary-lighter;
+
+
+// diagram colors
+$salmon: #e57272;
+$pink: #f06292;
+$skyblue: #169cdf;
+$periwinkle: #7986cb;
+$orange: #e2780d;
+$green: #61a435;
+$violet: #9575cd;
+$orchid: #ba68c8;
+$brown: #a1887f;
+
+$diagram-colors: (
+  "salmon": $salmon,
+  "pink": $pink,
+  "skyblue": $skyblue,
+  "periwinkle": $periwinkle,
+  "orange": $orange,
+  "green": $green,
+  "violet": $violet,
+  "orchid": $orchid,
+  "brown": $brown
+);
+
+$theme-and-diagram-colors: map-merge($theme-colors, $diagram-colors);
+
+$enable-negative-margins: true;
+
+// grid break points
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1280px,
+  xxl: 1368px
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1240px
+);
+
+// modal sizes
+$modal-sizes: (
+  sm: 300px,
+  md: 480px,
+  lg: 800px,
+  xl: 1140px,
+  xxl: 1280px
+);
+
+// create breakpoint variables from map
+$breakpoint-sm: map.get($grid-breakpoints, sm);
+$breakpoint-md: map.get($grid-breakpoints, md);
+$breakpoint-lg: map.get($grid-breakpoints, lg);
+$breakpoint-xl: map.get($grid-breakpoints, xl);
+$breakpoint-xxl: map.get($grid-breakpoints, xxl);
+
+// base font styling - used on the body tag
+$font-base-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-base-letter-spacing: 0.025rem;
+
+// rem variables
+$rem-1: 0.0625rem;
+$rem-2: 0.125rem;
+$rem-3: 0.1875rem;
+$rem-4: 0.25rem;
+$rem-5: 0.3125rem;
+$rem-6: 0.375rem;
+$rem-8: 0.5rem;
+$rem-9: 0.5625rem;
+$rem-10: 0.625rem;
+$rem-11: 0.6875rem;
+$rem-12: 0.75rem;
+$rem-14: 0.875rem;
+$rem-15: 0.9375rem;
+$rem-16: 1rem;
+$rem-18: 1.125rem;
+$rem-20: 1.25rem;
+$rem-21: 1.3125rem;
+$rem-22: 1.375rem;
+$rem-24: 1.5rem;
+$rem-26: 1.625rem;
+$rem-27: 1.6875rem;
+$rem-28: 1.75rem;
+$rem-30: 1.875rem;
+$rem-34: 2.125rem;
+$rem-36: 2.25rem;
+$rem-39: 2.4375rem;
+$rem-40: 2.5rem;
+$rem-42: 2.625rem;
+$rem-45: 2.8125rem;
+$rem-48: 3rem;
+$rem-49: 3.0625rem;
+$rem-54: 3.375rem;
+$rem-60: 3.75rem;
+$rem-61: 3.8125rem;
+$rem-72: 4.5rem;
+$rem-81: 5rem;
+$rem-96: 6rem;
+$rem-110: 6.875rem;
+$rem-125: 7.8125rem;
+$rem-160: 10rem;
+$rem-192: 12rem;
+$rem-225: 14.0625rem;
+
+// spacer definition
+$spacer-6: $rem-6;
+$spacer-9: $rem-9;
+$spacer-12: $rem-12;
+$spacer-15: $rem-15;
+$spacer-18: $rem-18;
+$spacer-24: $rem-24;
+$spacer-30: $rem-30;
+$spacer-36: $rem-36;
+
+$spacers: (
+  0: 0,
+  1: (
+    $spacer-6
+  ),
+  2: (
+    $spacer-9
+  ),
+  3: (
+    $spacer-12
+  ),
+  4: (
+    $spacer-15
+  ),
+  5: (
+    $spacer-18
+  ),
+  6: (
+    $spacer-24
+  ),
+  7: (
+    $spacer-30
+  ),
+  8: (
+    $spacer-36
+  )
+);
+
+//
+// common styles
+// will be used to style the focus ring
+$common-box-shadow-focus-ring:
+  0 0 0 1px #fff,
+  0 0 0 3px rgba(59, 153, 252, 0.7);
+
+// link
+// $link-color: $primary;
+// $link-hover-color: $primary;
+
+// form fields
+$input-bg: $gray-5;
+$input-disabled-bg: $gray-4;
+$input-border-color: $gray-2;
+// $input-line-height: 1.375;
+// $input-btn-focus-box-shadow: none;
+$label-margin-bottom: $rem-3;
+// $custom-control-indicator-focus-box-shadow: none;
+$custom-control-indicator-active-border-color: $gray-1;
+$input-border-radius: 0px;
+$input-font-size: $rem-14;
+$input-height: $rem-36;
+$input-focus-border-color: $primary;
+$input-disabled-bg: $gray-4;
+
+$form-group-margin-bottom: $rem-18;
+$form-feedback-font-size: $rem-14;
+
+$input-group-addon-border-color: $gray-2;
+
+// input sizes
+$input-height-sm: $rem-27;
+
+$input-btn-focus-box-shadow: $common-box-shadow-focus-ring;
+// $input-focus-box-shadow: $common-box-shadow-focus-ring;
+
+$custom-select-disabled-bg: $gray-4;
+
+// sm select
+$custom-select-height-sm: pxToRem(26);
+
+// large select
+$custom-select-height-lg: pxToRem(45);
+$custom-select-font-size-lg: pxToRem(16);
+
+// mobile nav bar
+$design-system-nav-bar-height: $rem-48;
+
+// gutter width
+$grid-gutter-width: 18px;
+
+// cards
+$card-cap-bg: $gray-4;
+$card-border-width: 0px;
+$card-border-color: transparent;
+$card-border-radius: 0px;
+
+$card-spacer-x: $rem-18;
+$card-spacer-y: $rem-15;
+$card-cap-padding-y: $rem-15;
+
+$card-xxl-spacer-x: $rem-24;
+$card-xxl-spacer-y: $rem-21;
+
+// importing data uri icons
+@import "icons-uri";
+
+//
+// custom controls
+//
+// common variable overrides for checkbox and radio buttons
+$custom-control-indicator-size: $rem-14;
+$custom-control-gutter: $rem-12;
+$custom-control-indicator-bg-size: 8px;
+$custom-control-indicator-border-color: $secondary;
+$custom-control-indicator-bg: #fff;
+
+$form-check-label-disabled-color: $gray-1;
+$custom-control-indicator-checked-disabled-bg: $gray-4;
+$custom-control-indicator-disabled-bg: $gray-4;
+// radio
+$custom-radio-indicator-icon-checked: $radio-button-icon;
+// checkbox
+$custom-checkbox-indicator-border-radius: $rem-1;
+
+// buttons
+$btn-font-size: $rem-10;
+$btn-font-weight: 700;
+$btn-border-radius: 0px;
+$btn-padding-x: $rem-24;
+$btn-padding-y: $rem-9;
+$btn-line-height: 1.6;
+$btn-letter-spacing: 1px;
+$btn-text-shadow: 0 1px 1px rgba(10, 54, 69, 0.15);
+
+// button large
+$btn-width-lg: $rem-160;
+
+// button small
+$btn-width-sm: $rem-125;
+$btn-border-radius-sm: 0px;
+$btn-font-size-sm: pxToRem(10);
+
+// input size
+$input-btn-padding-y-sm: $rem-4;
+$input-btn-padding-x-sm: $rem-8;
+$input-btn-font-size-sm: $rem-12;
+$input-btn-line-height-sm: $rem-18;
+
+// input lg
+$input-height-lg: $rem-45;
+// $input-padding-y-lg:
+// $input-padding-x-lg;
+$input-font-size-lg: $rem-16;
+// $input-line-height-lg;
+$input-border-radius-lg: 0;
+
+// input sm
+$input-border-radius-sm: 0;
+$input-height-sm: pxToRem(26);
+
+// btn lg
+$btn-padding-y-lg: $rem-12;
+$btn-padding-x-lg: $rem-24;
+$btn-font-size-lg: $rem-12;
+$btn-line-height-lg: 1.6;
+$btn-border-radius-lg: 0;
+
+//
+// modals
+//
+
+$modal-content-border-width: 0px;
+$modal-content-border-radius: 0px;
+
+$modal-header-padding-y: $rem-12;
+$modal-header-padding-x: $rem-18;
+
+$close-font-size: $rem-16;
+$close-font-weight: 400;
+$close-text-shadow: inherit;
+
+$modal-inner-padding: $rem-18;
+
+$modal-footer-margin-between: 0;
+
+$modal-dialog-margin-y-sm-up: $rem-45;
+$modal-dialog-margin: $rem-24;
+
+$modal-md: 480px;
+
+$modal-height-lg: 800px;
+
+$modal-content-bg: #ffffff;
+
+//
+// shadows
+//
+// $box-shadow-sm:
+$box-shadow: 0px 1px 3px rgba(10, 40, 69, 0.25);
+$box-shadow-lg: 0 1px 3px 0 rgba(10, 40, 69, 0.25);
+
+//
+// nav bar
+//
+$navbar-padding-y: 0px;
+$navbar-padding-x: 0px;
+$navbar-nav-link-padding-x: $rem-18;
+
+$nav-link-padding-y: $rem-11;
+
+$primary-nav-bar-height: $rem-40;
+$secondary-nav-bar-height: $rem-40;
+$nav-bar-highlight-color: darken(saturate(adjust-hue($secondary, 1), 25.58), 11.76);
+$nav-bar-highlight-link-hover-color: darken(saturate(adjust-hue($secondary, 1), 11.75), 4.12);
+
+//
+// list groups
+//
+$list-group-item-padding-y: $rem-15;
+$list-group-item-padding-x: 0px;
+
+// caret
+$enable-caret: false;
+
+//
+// drop down
+//
+$dropdown-font-size: $rem-14;
+$dropdown-border-width: 0px;
+$dropdown-border-radius: 0px;
+$dropdown-box-shadow: $box-shadow-lg;
+
+$dropdown-link-color: $secondary;
+
+$dropdown-link-hover-color: $dark;
+$dropdown-link-hover-bg: $primary-light;
+
+//
+// high level information
+//
+$high-level-info-height: $rem-54;
+//
+// list group customization for side navigation
+//
+$list-group-action-hover-color: $dark;
+$list-group-hover-bg: $primary-lighter;
+$list-group-action-active-color: $dark;
+$list-group-action-active-bg: $primary-lighter;
+$list-group-active-color: $primary;
+$list-group-active-bg: transparent;
+// table
+$table-accent-bg: $gray-5;
+$table-cell-padding: $rem-15;
+$table-cell-padding-sm: $rem-12;
+
+//
+// typography
+//
+$t-18-letter-spacing: 0.45px;
+$t-16-letter-spacing: 0.4px;
+$t-14-letter-spacing: 0.35px;
+$t-12-letter-spacing: 0.3px;
+
+//
+// print styles
+//
+$enable-print-styles: false;
+
+//
+// popover
+//
+$popover-border-color: $gray-3;
+$popover-arrow-outer-color: $gray-3;
+$popover-border-radius: 0px;
+$popover-arrow-width: $rem-8;
+$popover-arrow-height: $rem-4;
+
+//
+// custom chip
+//
+$custom-chip-height: $rem-26;
+$custom-chip-checked-disabled-opacity: 0.5;
+
+//
+// custom switches
+//
+$custom-switch-width: $rem-28;
+$custom-switch-indicator-size: $rem-12;
+$custom-switch-indicator-border-radius: $rem-14;
+$custom-switch-disabled-opacity: 0.5;
+
+//
+// input groups
+//
+$input-group-addon-bg: $gray-4;
+
+//
+// base font size declaration
+//
+$base-size: 16;
+
+//
+// tooltip
+//
+$tooltip-color: #ffffff;
+$tooltip-bg: $dark;
+$tooltip-border-radius: $rem-4;
+$tooltip-arrow-color: $gray-3;
+$tooltip-arrow-width: $rem-8;
+$tooltip-arrow-height: $rem-4;
+$tooltip-opacity: 1;
+$tooltip-padding-y: $rem-8;
+$tooltip-padding-x: $rem-12;
+$tooltip-arrow-color: $dark;
+$tooltip-max-width: pxToRem(132);
+
+//
+// alerts
+//
+$alert-padding-y: pxToRem(9);
+$alert-padding-x: pxToRem(18);
+// $alert-margin-bottom;
+$alert-border-width: 0px;
+$alert-border-radius: 0px;
+$alert-box-shadow: 0 1px 1px 0 rgba(10, 54, 69, 0.15);
+
+//
+// icon font sizes
+//
+$i-12: 0.75rem;
+$i-16: 1rem;
+$i-22: 1.375rem;
+$i-24: 1.5rem;
+
+//
+// pagination
+//
+$pagination-padding-y: pxToRem(9);
+$pagination-padding-x: pxToRem(12);
+$pagination-border-color: $gray-3;
+$pagination-active-color: $dark;
+$pagination-active-bg: $primary-light;
+$pagination-active-border-color: $gray-3;
+
+// order template
+$order-header-height: pxToRem(64);
+
+// large inputs - checkboxes and radio
+
+$custom-control-lg-gutter: pxToRem(12);
+$custom-control-lg-indicator-size: pxToRem(18);
+
+$custom-control-width-lg: $custom-control-lg-gutter;
+$custom-control-height-lg: $custom-control-lg-gutter;
+$custom-control-indicator-size-lg: $custom-control-lg-indicator-size;
+
+// custom large switch
+
+// $custom-switch-lg-indicator:  pxToRem(30);
+$custom-switch-lg-height: pxToRem(30);
+$custom-switch-lg-width: pxToRem(54);
+$custom-switch-lg-gutter: pxToRem(12);
+$custom-switch-lg-circle-spacer: pxToRem(3);
+$custom-switch-indicator-lg-size: calc($custom-switch-lg-height - (pxToRem(6)));
+
+// custom date picker
+$custom-date-picker-padding-x: pxToRem(12);
+$custom-date-picker-bg-size: pxToRem(21);
+$custom-date-picker-position-x: pxToRem(9);
+$custom-date-picker-background: $custom-date-picker-icon no-repeat right $custom-date-picker-position-x center /
+  $custom-date-picker-bg-size;
+
+// custom time picker
+$custom-time-picker-padding-x: pxToRem(12);
+$custom-time-picker-bg-size: pxToRem(15);
+$custom-time-picker-position-x: pxToRem(10.5);
+$custom-time-picker-padding-right: pxToRem(36);
+$custom-time-picker-background: $custom-time-picker-icon no-repeat right $custom-time-picker-position-x center /
+  $custom-time-picker-bg-size;

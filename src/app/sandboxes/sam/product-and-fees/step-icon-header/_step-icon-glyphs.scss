@@ -1,0 +1,64 @@
+@import '../styles/color-tokens';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+$milestone-background: #E8EAED;
+$milestone-icon: #C2C8CE;
+$milestone-complete-icon: #62A76E;
+$milestone-complete-background: #C4E8CB;
+
+.step-icon {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--step-icon-size, 32px);
+    height: var(--step-icon-size, 32px);
+    background-color: var(--step-icon-bg, #{$milestone-background});
+    color: $milestone-icon;
+    font-size: var(--step-icon-font-size, 22px);
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    @include media-breakpoint-down(md) {
+        width: var(--step-icon-mobile-size, 24px);
+        height: var(--step-icon-mobile-size, 24px);
+        font-size: var(--step-icon-mobile-font-size, 16px);
+    }
+
+    &.active {
+        color: var(--exos-new-primary);
+    }
+}
+
+
+.step-icon-img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    height: var(--step-icon-size, 32px);
+    width: var(--step-icon-size, 32px);
+    flex-shrink: 0;
+
+    @include media-breakpoint-down(md) {
+        height: var(--step-icon-mobile-size, 24px);
+        width: var(--step-icon-mobile-size, 24px);
+    }
+}
+
+
+.step-icon-complete {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+
+    @include media-breakpoint-down(md) {
+        width: 22px;
+        height: 22px;
+    }
+}

@@ -1,0 +1,274 @@
+@if (showToolbar) {
+  <div class="dt__toolbar">
+    <div>
+      @if (heading) {
+        <h2 class="dt__heading">{{ heading }}</h2>
+      }
+      @if (description) {
+        <p class="dt__description">{{ description }}</p>
+      }
+    </div>
+    <div class="dt__actions">
+      <ng-content select="[dtActions]" />
+    </div>
+  </div>
+}
+
+<div class="dt__frame">
+  <div
+    class="dt__scroll"
+    role="region"
+    tabindex="0"
+    [id]="id('scroll')"
+    [attr.aria-label]="heading || 'Table'"
+    [style.max-height]="maxHeight">
+
+    <table class="table dt__table" [style.min-width.px]="minTableWidth" [attr.aria-busy]="loading">
+
+      <colgroup>
+        @if (leadColumn) {
+          <col [style.width.px]="leadColumnPx">
+        }
+        @for (col of columns; track col.id; let i = $index) {
+          <col [style.width]="columnWidths[i]">
+        }
+        @if (hasFilterRow) {
+          <col [style.width.px]="applyColumnPx">
+        }
+      </colgroup>
+
+      <thead>
+        <tr>
+          @if (leadColumn) {
+            <ng-template #leadHeader>
+              @if (leadColumn === 'checkbox') {
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  aria-label="Select all rows"
+                  [id]="id('select-all')"
+                  [checked]="allSelected"
+                  [indeterminate]="someSelected"
+                  [disabled]="!rows.length"
+                  (change)="toggleAll()">
+              } @else {
+                <span class="visually-hidden">{{ leadColumn === 'drag' ? 'Reorder' : 'Expand' }}</span>
+              }
+            </ng-template>
+
+            <!-- With a filter row, the control sits level with the filter inputs. -->
+            <th scope="col" class="dt__lead" [class.dt__sticky]="hasStickyColumns">
+              <div class="dt__label">
+                @if (!hasFilterRow) {
+                  <ng-container *ngTemplateOutlet="leadHeader" />
+                }
+              </div>
+              @if (hasFilterRow) {
+                <div class="dt__filter">
+                  <ng-container *ngTemplateOutlet="leadHeader" />
+                </div>
+              }
+            </th>
+          }
+
+          @for (col of columns; track col.id; let i = $index) {
+            @let direction = sortDirection(col);
+            <th
+              scope="col"
+              [class]="alignClass(col)"
+              [class.dt__sticky]="stickyLeft[i] != null"
+              [style.left.px]="stickyLeft[i]"
+              [attr.aria-sort]="ariaSort(col)">
+
+              <div class="dt__label">
+                @if (col.sortable) {
+                  <button
+                    type="button"
+                    class="dt__sort"
+                    [class.dt__sort--active]="!!direction"
+                    [id]="id('sort', col.id)"
+                    (click)="toggleSort(col)">
+                    {{ col.header }}
+                    <span [class]="direction === 'asc' ? 'icon-caret-up' : 'icon-caret-down'" aria-hidden="true"></span>
+                  </button>
+                } @else {
+                  {{ col.header }}
+                }
+              </div>
+
+              @if (hasFilterRow) {
+                @let key = filterKey(col);
+                @let filterTemplate = filterTemplates.get(col.id);
+                <div class="dt__filter">
+                  @if (filterTemplate) {
+                    <ng-container *ngTemplateOutlet="filterTemplate; context: filterContext(col)" />
+                  } @else if (col.filter === 'text') {
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [id]="id('filter', col.id)"
+                      [attr.aria-label]="'Filter by ' + col.header"
+                      [value]="draft[key] ?? ''"
+                      (input)="setFilter(key, $any($event.target).value)"
+                      (keydown.enter)="applyFilters()">
+                  } @else if (selectFilter(col); as select) {
+                    <select
+                      class="form-select form-select-sm"
+                      [id]="id('filter', col.id)"
+                      [attr.aria-label]="'Filter by ' + col.header"
+                      (change)="setFilter(key, $any($event.target).value)">
+                      <option value="">{{ select.allLabel ?? 'All' }}</option>
+                      @for (option of select.options; track option.value) {
+                        <option [value]="option.value" [selected]="draft[key] === option.value">{{ option.label }}</option>
+                      }
+                    </select>
+                  }
+                </div>
+              }
+            </th>
+          }
+
+          @if (hasFilterRow) {
+            <th scope="col" class="dt__apply dt__sticky">
+              <div class="dt__label">
+                <span class="visually-hidden">Apply filters</span>
+              </div>
+              <div class="dt__filter">
+                @if (applyButton) {
+                  <ng-container *ngTemplateOutlet="applyButton.template; context: { $implicit: applyFilters, id: id('apply') }" />
+                } @else {
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary"
+                    aria-label="Apply filters"
+                    [id]="id('apply')"
+                    (click)="applyFilters()">
+                    <span class="icon-filters" aria-hidden="true"></span>
+                  </button>
+                }
+              </div>
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody [class.dt__body--loading]="loading">
+        @for (row of rows; track rowKey(row); let i = $index) {
+          @let expanded = leadColumn === 'chevron' && isExpanded(row);
+          <tr [class.dt__row--odd]="i % 2 === 1">
+            @if (leadColumn) {
+              <td class="dt__lead" [class.dt__sticky]="hasStickyColumns">
+                @switch (leadColumn) {
+                  @case ('checkbox') {
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [id]="id('row', i, 'select')"
+                      [attr.aria-label]="'Select row ' + (i + 1)"
+                      [checked]="isSelected(row)"
+                      (change)="toggleRow(row)">
+                  }
+                  @case ('drag') {
+                    <span class="icon-grippy-dots dt__drag" aria-hidden="true"></span>
+                  }
+                  @case ('chevron') {
+                    <button
+                      type="button"
+                      class="dt__chevron"
+                      [id]="id('row', i, 'expand')"
+                      [attr.aria-expanded]="expanded"
+                      [attr.aria-label]="(expanded ? 'Collapse row ' : 'Expand row ') + (i + 1)"
+                      (click)="toggleExpanded(row)">
+                      <span [class]="expanded ? 'icon-chevron-down' : 'icon-chevron-right'" aria-hidden="true"></span>
+                    </button>
+                  }
+                }
+              </td>
+            }
+
+            @for (col of columns; track col.id; let c = $index) {
+              @let cellTemplate = cellTemplates.get(col.id);
+              <td
+                [class]="alignClass(col)"
+                [class.dt__truncate]="col.truncate"
+                [class.dt__sticky]="stickyLeft[c] != null"
+                [style.left.px]="stickyLeft[c]">
+                @if (cellTemplate) {
+                  <ng-container *ngTemplateOutlet="cellTemplate; context: { $implicit: row, index: i, column: col }" />
+                } @else {
+                  {{ cellValue(row, col) }}
+                }
+              </td>
+            }
+
+            @if (hasFilterRow) {
+              <td class="dt__apply dt__sticky"></td>
+            }
+          </tr>
+
+          @if (expanded && detailRow) {
+            <tr class="dt__detail">
+              <td [attr.colspan]="columnCount">
+                <ng-container *ngTemplateOutlet="detailRow.template; context: { $implicit: row, index: i }" />
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr>
+            <td class="dt__empty" [attr.colspan]="columnCount">
+              {{ loading ? 'Loading…' : emptyMessage }}
+            </td>
+          </tr>
+        }
+      </tbody>
+
+    </table>
+  </div>
+
+  @if (loading && rows.length) {
+    <div class="dt__spinner spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading…</span>
+    </div>
+  }
+</div>
+
+@if (paginated && total > 0) {
+  <div class="pagination-footer">
+    <div class="items-per-page">
+      <select class="form-select" [id]="id('page-size')" (change)="setPageSize($any($event.target).value)">
+        @for (size of pageSizes; track size) {
+          <option [value]="size" [selected]="size === query.pageSize">{{ size }}</option>
+        }
+      </select>
+      <label [attr.for]="id('page-size')">items per page</label>
+    </div>
+    <div class="showing-text">Showing {{ rangeStart }}-{{ rangeEnd }}</div>
+    <div class="pagination-wrapper">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="query.page <= 1">
+            <button
+              type="button"
+              class="page-link"
+              aria-label="Previous"
+              [id]="id('page-prev')"
+              [disabled]="query.page <= 1"
+              (click)="goToPage(query.page - 1)">Prev</button>
+          </li>
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ query.page }}</span>
+          </li>
+          <li class="page-item" [class.disabled]="query.page >= pageCount">
+            <button
+              type="button"
+              class="page-link"
+              aria-label="Next"
+              [id]="id('page-next')"
+              [disabled]="query.page >= pageCount"
+              (click)="goToPage(query.page + 1)">Next</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+}

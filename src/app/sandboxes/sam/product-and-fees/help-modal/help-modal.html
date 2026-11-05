@@ -1,0 +1,27 @@
+<div class="modal fade" tabindex="-1" #helpModal (click)="close()" (keydown.escape)="close()"
+  [class.show]="shown()" [style.display]="displayed() ? 'block' : 'none'"
+  [attr.aria-hidden]="displayed() ? null : 'true'" [attr.aria-modal]="displayed() ? 'true' : null"
+  [attr.role]="displayed() ? 'dialog' : null">
+  <div class="modal-dialog modal-dialog-centered help-modal" (click)="$event.stopPropagation()"
+    role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="help-modal-title">Need Help?</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-4">Reach our support team through any of the options below</p>
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex align-items-center gap-3">
+          <span class="icon-cellphone text-primary" aria-hidden="true"></span>
+          <p class="fw-bold text-secondary">877-553-3130</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <span class="icon-message text-primary"></span>
+          <p class="fw-bold text-secondary">support@exostechnology.com</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

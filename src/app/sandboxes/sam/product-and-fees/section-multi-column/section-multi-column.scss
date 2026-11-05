@@ -1,0 +1,221 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+.product-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  .product-row-label {
+    font-size: 16px;
+    color: #304258;
+
+    @include media-breakpoint-down(md) {
+      font-size: 14px;
+    }
+  }
+
+  &.has-header .product-row-label {
+    margin-top: 25px;
+  }
+
+  .product-row-boxes {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex: 0 1 240px;
+    min-width: 240px;
+
+    // Let the row size to its columns' natural (wider) desktop width instead
+    // of being capped at the mobile basis.
+    @include media-breakpoint-up(md) {
+      flex: 0 1 auto;
+    }
+  }
+
+  .product-row-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    // Definite width (not just flex-basis) so an empty column (e.g. Land's
+    // interior) still contributes its full size to the row, keeping the
+    // populated column aligned with the other rows.
+    @include media-breakpoint-up(md) {
+      flex: 0 1 auto;
+      width: 150px;
+    }
+
+    // The divider between columns is drawn once by the parent section
+    // (.product-section.multi-column) so it renders as a single continuous
+    // line across all rows instead of per-row segments.
+    &:not(:last-child) {
+      padding-right: 12px;
+
+      // 150px content + 12px divider padding (border-box).
+      @include media-breakpoint-up(md) {
+        width: 162px;
+      }
+    }
+  }
+
+  .product-row-col-header {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #687885;
+  }
+
+  .product-row-box {
+    width: 100%;
+    height: 44px;
+    min-width: 0;
+    padding: 8px 4px;
+    border: 1px dashed #bfcad5;
+    border-radius: 4px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, border-style 0.2s ease;
+    appearance: none;
+  }
+
+  .product-row-box-selected {
+    background: #e4f2fe;
+    border: 1px solid #066dce;
+  }
+
+  .product-row-box-placeholder {
+    display: none;
+  }
+
+  .product-row-box-disabled {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #d8dfe6;
+    border-radius: 4px;
+    background: #f0f2f5;
+    pointer-events: none;
+  }
+
+  .product-row-fee-input {
+    width: 100%;
+    max-width: 112px;
+    min-width: 0;
+    height: 44px;
+    padding: 4px 12px;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: nowrap;
+    border: 1px solid #bfcad5;
+    border-radius: 4px;
+    background: #fff;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    @include media-breakpoint-up(md) {
+      max-width: 150px;
+    }
+
+    &.checked {
+      border-color: #066dce;
+      background: #eff7fe;
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:has(.form-control:invalid) {
+      border-color: #cc3115;
+    }
+
+    .input-group-text {
+      background: transparent;
+      border: none;
+      color: #687885;
+      font-size: 14px;
+      padding: 0;
+      height: auto;
+      align-self: center;
+
+      &__dollar {
+        border-left: 1px solid #D8DFE6;
+        padding-left: 8px;
+      }
+      
+    }
+
+    .form-control {
+      border: none;
+      font-size: 13px;
+      background-color: transparent;
+      padding: 0;
+      flex: 0 1 auto;
+      width: 40px;
+      height: auto;
+      align-self: center;
+      -moz-appearance: textfield;
+      appearance: textfield;
+
+      // Room for values like 5000.50 without cramping the mobile layout.
+      @include media-breakpoint-up(md) {
+        width: 70px;
+      }
+
+      &:focus {
+        box-shadow: none;
+      }
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        appearance: none;
+        margin: 0;
+      }
+    }
+  }
+
+}
+
+@media (max-width: 543px) {
+  .product-row {
+
+    .product-row-label {
+      max-width: 119px;
+      min-width: 119px;
+    }
+
+    .product-row-boxes {
+      flex: 0 1 240px;
+      width: auto;
+      min-width: 0;
+    }
+
+    .product-row-col:not(:last-child) {
+      padding-right: 0;
+    }
+
+    .product-row-fee-input {
+      flex-wrap: nowrap;
+      padding: 4px 8px;
+      gap: 6px;
+
+      .form-control {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+      }
+    }
+  }
+}
+
+.form-check-input {
+  margin: 0px;
+}

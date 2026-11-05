@@ -1,0 +1,77 @@
+<div class="nav-shell">
+<nav>
+  <img ngSrc="assets/images/general/sl-logo-only.svg" width="24" height="32" alt="ServiceLink" class="signup-logo" />
+
+  <app-step-icon-header class="d-none d-md-flex" [steps]="steps()" [activeIndex]="activeIndex()"
+    (stepClick)="onProgressStepClick($event)" />
+
+  <button type="button" class="mobile-step-toggle d-flex d-md-none" (click)="toggleMobileSteps()"
+    [attr.aria-expanded]="mobileStepsOpen()" aria-controls="mobile-steps-panel">
+    @if (steps()[activeIndex()].isFilled) {
+    <img src="assets/images/step-icons/completed-icon.svg" class="step-icon-complete mobile-step-toggle-icon" alt="" aria-hidden="true" />
+    } @else if (steps()[activeIndex()].img) {
+    <img [src]="'assets/images/step-icons/' + steps()[activeIndex()].img + '-selected.svg'"
+         class="step-icon-img mobile-step-toggle-icon" alt="" aria-hidden="true" />
+    } @else {
+    <span class="step-icon mobile-step-toggle-icon active" [class]="steps()[activeIndex()].icon" aria-hidden="true"></span>
+    }
+    <span class="mobile-step-toggle-label">{{ steps()[activeIndex()].label }}</span>
+    <span [class]="mobileStepsOpen() ? 'icon-chevron-up' : 'icon-chevron-down'"
+      class="mobile-step-toggle-chevron text-primary" aria-hidden="true"></span>
+  </button>
+
+  <button type="button" class="btn btn-icon btn-icon-primary-text d-flex mobile-hamburger"
+    aria-label="Open menu" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen()"
+    aria-controls="mobile-menu-panel">
+    <span class="icon-hamburger text-primary" aria-hidden="true"></span>
+  </button>
+
+</nav>
+
+@if (mobileStepsOpen()) {
+<div class="mobile-steps-panel d-md-none" id="mobile-steps-panel" role="region" aria-label="Progress steps">
+  @for (step of steps(); track step.label; let i = $index; let last = $last) {
+  <button type="button" class="mobile-step-row" (click)="onMobileStepClick()">
+    <span class="mobile-step-icon-label">
+      <span class="mobile-step-icon-col">
+        @if (step.isFilled) {
+          <img src="assets/images/step-icons/completed-icon.svg" class="step-icon-complete" alt="" aria-hidden="true" />
+        } @else if (step.img) {
+          <img [src]="'assets/images/step-icons/' + step.img + (i === activeIndex() ? '-selected' : '') + '.svg'"
+               class="step-icon-img" alt="" aria-hidden="true" />
+        } @else {
+          <span class="step-icon" [class]="step.icon" [class.active]="i === activeIndex()" aria-hidden="true"></span>
+        }
+      </span>
+      <span class="mobile-step-label">{{ step.label }}</span>
+    </span>
+    @if (!last) {
+    <span class="mobile-connector-line" [class.line-done]="step.isFilled"></span>
+    }
+  </button>
+  }
+</div>
+}
+
+@if (mobileMenuOpen()) {
+<div class="hamburger-panel" id="mobile-menu-panel" role="region" aria-label="Menu">
+  <div class="hamburger-panel-actions">
+    <button type="button" class="hamburger-panel-row" (click)="onMobileMenuHelp(helpModal)">
+      <span class="icon-question-circle hamburger-panel-icon" aria-hidden="true"></span>
+      Help
+    </button>
+    <button type="button" class="hamburger-panel-row" (click)="closeMobileMenu()">
+      <span class="icon-home hamburger-panel-icon" aria-hidden="true"></span>
+      Progress Dashboard
+    </button>
+    <button type="button" class="hamburger-panel-row" (click)="closeMobileMenu()">
+      <span class="icon-box-arrow-right hamburger-panel-icon" aria-hidden="true"></span>
+      Logout
+    </button>
+  </div>
+</div>
+}
+
+</div>
+
+<app-help-modal #helpModal />

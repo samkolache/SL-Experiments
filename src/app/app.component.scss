@@ -1,0 +1,21 @@
+.e-recording-container {
+  height: calc(100vh - 40px);
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: auto;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+
+  .row {
+    @media (max-width: 767.98px) {
+        height: auto !important;
+
+        .cold-md-6 {
+            height: auto !important;
+        }
+    }
+  }
+
+}

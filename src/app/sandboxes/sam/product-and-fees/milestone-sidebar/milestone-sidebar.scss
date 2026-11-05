@@ -1,0 +1,171 @@
+@import '../styles/color-tokens';
+
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar {
+    width: 100%;
+    height: 100%;
+    max-height: 895px;
+    position: sticky;
+    top: 48px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: 32px;
+    border-radius: 24px;
+    overflow: clip;
+    background:
+        linear-gradient(180deg, #F2F8FD 4.5167%, #FAFCFF 13.266%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 12px 30px 0 rgba($color-shadow-strong, .12);
+}
+
+// /w9, /ach, /parev1832 and /geo-competency-form. These four run two padding
+// states: 100px while the form is being filled in, dropping to 48px on the PDF
+// review screen, where SignStepUiService flips .is-sign-step onto the shell
+// (see the matching .layout-body rules in onboarding-layout.scss). The rail has
+// to track both — the sticky offset matches the body padding so it does not
+// jump on first scroll, and the height budget is the viewport less that padding
+// top and bottom, so the rail's bottom edge lands on the card's however far the
+// form scrolls.
+//
+// A max-height cap rather than the fixed height /my-info uses below: the w9 and
+// ACH cards stretch to the container, so a fixed rail height would push the
+// container taller and stretch a short business-type 'select' card to fill the
+// screen with it. A cap leaves the columns equal-height while the card is short
+// and only bites once the form outgrows the viewport.
+@media (min-width: 1370px) {
+    :host-context(.layout-shell.is-w9) .sidebar,
+    :host-context(.layout-shell.is-ach) .sidebar,
+    :host-context(.layout-shell.is-parev1832) .sidebar,
+    :host-context(.layout-shell.is-geo-comp) .sidebar {
+        top: 100px;
+        max-height: calc(100vh - 200px);
+        max-height: calc(100dvh - 200px);
+    }
+
+    // Compound selectors rather than .is-sign-step alone so this outranks the
+    // per-route rule above on specificity instead of on source order, matching
+    // how onboarding-layout.scss pairs the two.
+    :host-context(.layout-shell.is-w9.is-sign-step) .sidebar,
+    :host-context(.layout-shell.is-ach.is-sign-step) .sidebar,
+    :host-context(.layout-shell.is-parev1832.is-sign-step) .sidebar,
+    :host-context(.layout-shell.is-geo-comp.is-sign-step) .sidebar {
+        top: 48px;
+        max-height: calc(100vh - 96px);
+        max-height: calc(100dvh - 96px);
+    }
+
+    // The 100px state leaves the tightest budget of any route, so it drops under
+    // the rail's intrinsic height on shorter screens. .sidebar-steps is the only
+    // child that flexes, so scroll the list rather than let .sidebar's
+    // `overflow: clip` cut rows off the bottom.
+    :host-context(.layout-shell.is-w9) .sidebar-steps,
+    :host-context(.layout-shell.is-ach) .sidebar-steps,
+    :host-context(.layout-shell.is-parev1832) .sidebar-steps,
+    :host-context(.layout-shell.is-geo-comp) .sidebar-steps {
+        min-height: 0;
+        overflow-y: auto;
+    }
+}
+
+// /my-info and /product-and-fees: the card grows past the fold and the page
+// scrolls, so the rail is sized to the viewport rather than to the (unbounded)
+// content column — a fixed height instead of the usual `100%` + 895px cap,
+// which on any viewport shorter than 943px ran the rail off the bottom of the
+// screen. 96px = the shell's 48px body padding top and bottom (both routes
+// share the `48px 100px` rule in onboarding-layout.scss), which is also the
+// sticky offset, so the rail keeps an even 48px gap top and bottom at every
+// scroll position and its bottom edge lands on the card's once the card stops.
+@media (min-width: 1370px) {
+    :host-context(.layout-shell.is-my-info) .sidebar,
+    :host-context(.layout-shell.is-product-fees) .sidebar {
+        height: calc(100vh - 96px);
+        height: calc(100dvh - 96px);
+        max-height: none;
+    }
+
+    // The step list is the only part that flexes, so it absorbs the squeeze on
+    // viewports too short for the rail's intrinsic ~637px. Scroll it rather
+    // than let .sidebar's `overflow: clip` cut the rows off.
+    :host-context(.layout-shell.is-my-info) .sidebar-steps,
+    :host-context(.layout-shell.is-product-fees) .sidebar-steps {
+        min-height: 0;
+        overflow-y: auto;
+    }
+}
+
+.sidebar-logo {
+    flex-shrink: 0;
+    width: 156px;
+    height: auto;
+    display: block;
+    margin-inline: 32px;
+    margin-block-end: 48px;
+}
+
+.sidebar-steps {
+    flex: 1 1 auto;
+    padding-inline: 32px;
+    // Sidebar icons/labels read larger and bolder than the horizontal header's.
+    --step-icon-size: 36px;
+    --step-icon-font-size: 24px;
+    --step-icon-label-gap: 16px;
+    --step-row-gap: 40px;
+    --step-label-font-size: 16px;
+    --step-label-font-weight: 700;
+    --step-label-color: var(--exos-new-text-body-primary);
+}
+
+// Nav-tab steps (W-9, Profile Photo, Geo-Competency) don't
+// use the connector line between icons, but keep the same grey circle badge
+// as the license/coverage list. Set as a custom property (not a descendant
+// selector) since .step-icon-container lives inside app-step-icon-header's
+// own template — view encapsulation blocks descendant selectors from
+// reaching in, but custom properties still cascade.
+.sidebar-nav-steps {
+    // --step-connector-display: none;
+}
+
+.sidebar-footer {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-inline: 32px;
+}
+
+.sidebar-footer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 8px;
+    border-radius: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--exos-new-text-body-primary);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--exos-new-bg-action-light);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--exos-new-primary);
+        outline-offset: -2px;
+    }
+}
+
+.sidebar-footer-icon {
+    font-size: 24px;
+    color: var(--exos-new-text-body-primary);
+}

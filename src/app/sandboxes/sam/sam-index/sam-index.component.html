@@ -1,0 +1,65 @@
+<div class="container-fluid py-3">
+
+  <div class="mb-3">
+    <app-theme-switcher />
+  </div>
+
+  <div class="mb-3">
+    <a routerLink="/sam/product-and-fees">Link to product-and-fees</a>
+  </div>
+
+  <app-data-table
+    heading="Orders"
+    description="ClosingSpa-style — sort fetches immediately, filters fetch on the apply button"
+    leadColumn="checkbox"
+    idPrefix="orders"
+    rowId="orderNumber"
+    maxHeight="480px"
+    [columns]="orderColumns"
+    [rows]="orders"
+    [total]="ordersTotal"
+    [loading]="ordersLoading"
+    [query]="ordersQuery"
+    (queryChange)="loadOrders($event)"
+    (selectionChange)="selectedOrders = $event">
+
+    <button dtActions type="button" class="btn btn-sm btn-outline-primary" [disabled]="!selectedOrders.length">
+      Assign ({{ selectedOrders.length }})
+    </button>
+    <button dtActions type="button" class="btn btn-sm btn-primary">New order</button>
+
+    <ng-template dtCell="orderNumber" let-row>
+      <button type="button" class="dt-link" (click)="lastOpened = row.orderNumber">{{ row.orderNumber }}</button>
+      @if (row.lockedBy) {
+        <span class="icon-lock ms-1" role="img" [attr.aria-label]="'Locked by ' + row.lockedBy" [title]="'Locked by ' + row.lockedBy"></span>
+      }
+    </ng-template>
+
+    <ng-template dtCell="created" let-row>{{ row.createdDate | date: 'short' }}</ng-template>
+
+    <ng-template dtCell="elapsed" let-row>
+      <div class="d-flex justify-content-between align-items-center">
+        {{ row.elapsed }}
+        @if (row.breached) {
+          <span class="icon-time text-danger" role="img" aria-label="Elapsed time breached"></span>
+        }
+      </div>
+    </ng-template>
+
+    <ng-template dtFilter="created" let-filters let-set="set" let-id="id" let-label="label">
+      <input
+        type="datetime-local"
+        class="form-control form-control-sm"
+        [id]="id"
+        [attr.aria-label]="label"
+        [value]="filters['createdAfter'] ?? ''"
+        (change)="set('createdAfter', $any($event.target).value)">
+    </ng-template>
+  </app-data-table>
+
+  @if (lastOpened) {
+    <p class="small mt-2 mb-0">Opened {{ lastOpened }}</p>
+  }
+  <pre class="small mt-2">{{ ordersQuery | json }}</pre>
+
+</div>
