@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:vercel": "ng build --base-href /",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:local": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --port 58530",
