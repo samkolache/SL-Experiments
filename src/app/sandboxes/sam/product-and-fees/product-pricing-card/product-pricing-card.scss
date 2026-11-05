@@ -1,0 +1,370 @@
+@use '../styles/variables' as *;
+
+// Breakpoints from the Figma frames:
+//   ≥934      desktop grid  (683:8835, 683:8694, 683:8976, 683:9118)
+//   768-933   transposed grid (683:9260, 683:9365)
+//   <768      stacked blocks (683:9470, 683:9691)
+$bp-tablet: 768px;
+$bp-desktop: 934px;
+
+$cell-pad: 12px;
+$label-col: 134px;        // desktop "Counties" column
+$label-col-tablet: 178px; // tablet product column
+$county-col-min: 134px;   // tablet county column
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+// ── Card shell ─────────────────────────────────────────────────────────────
+.card.pricing-card {
+  // Mock has no accent strip: just the card's soft gradient fill.
+  background: $card-background-gradient;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 34px 0 rgba(10, 54, 69, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 16px;
+
+  @media (min-width: $bp-tablet) {
+    gap: 32px;
+    padding: 32px;
+  }
+}
+
+.pricing-title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 27px;
+  font-weight: 700;
+  color: var(--exos-new-text-body-primary);
+
+  @media (min-width: $bp-tablet) {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+.pricing-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// ── Banner (existing .banner.banner-primary, new copy) ────────────────────
+.pricing-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--exos-new-border-action-primary);
+  border-radius: 5px;
+  background: var(--exos-primary-lighter);
+
+  .icon-attention-circle-fill {
+    flex: none;
+    margin-top: 2px;
+    font-size: 20px;
+    color: var(--exos-new-icon-action-primary);
+  }
+
+  .text {
+    display: block;
+    flex: 1 1 auto;
+    margin: 0;
+    padding-left: 1.4em;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--exos-new-text-body-primary);
+  }
+}
+
+// ── Shared: fee input (existing input-group, restyled) ─────────────────────
+.pricing-fee-input {
+  flex: none;
+  flex-wrap: nowrap;
+  width: 100px;
+  height: 44px;
+  margin: 0 auto;
+
+  .input-group-text {
+    width: 36px;
+    justify-content: center;
+    padding: 0;
+    background: var(--exos-new-bg-default-light);
+    border: 1px solid var(--exos-new-border-default-primary);
+    border-radius: 4px 0 0 4px;
+    color: var(--exos-new-icon-body-primary);
+    font-size: 16px;
+  }
+
+  .form-control {
+    min-width: 0;
+    height: 44px;
+    padding: 10px 12px;
+    text-align: right;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--exos-new-text-body-primary);
+    background: var(--exos-new-bg-default-primary);
+    border: 1px solid var(--exos-new-border-default-primary);
+    border-radius: 0 4px 4px 0;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type='number'] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+  }
+}
+
+// ── Shared: product checkbox + label + info icon ──────────────────────────
+.pricing-check {
+  display: flex;
+  margin: 0;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--exos-new-text-body-secondary);
+
+  .form-check-input {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .icon-info-circle {
+    margin-left: 2px;
+    font-size: 14px;
+    vertical-align: -2px;
+    color: var(--exos-new-icon-action-primary);
+  }
+}
+
+// ── Shared: table chrome ──────────────────────────────────────────────────
+.pricing-table-wrap {
+  border: 1px solid var(--exos-new-border-default-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pricing-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: $cell-pad;
+    vertical-align: middle;
+    background: var(--exos-new-bg-default-primary);
+    border-left: 1px solid var(--exos-new-border-default-light);
+    border-top: 1px solid var(--exos-new-border-default-lighter);
+  }
+
+  tr > :first-child { border-left: 0; }
+  thead th,
+  thead td {
+    border-top: 0;
+    background: var(--bs-body-bg);
+  }
+
+  tbody th {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    color: var(--exos-new-text-body-secondary);
+  }
+}
+
+.pricing-corner {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--exos-new-text-body-secondary);
+}
+
+// ── ≥934: desktop grid ────────────────────────────────────────────────────
+.pricing-desktop {
+  display: none;
+
+  @media (min-width: $bp-desktop) {
+    display: block;
+  }
+
+  .pricing-table tr > :first-child { width: $label-col; }
+  tbody td,
+  tbody th { height: 68px; }
+
+  .pricing-product-head {
+    height: 88px;
+    text-align: center;
+
+    .pricing-check {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}
+
+// ── 768-933: transposed grid ──────────────────────────────────────────────
+.pricing-tablet {
+  display: none;
+  overflow-x: auto;
+
+  @media (min-width: $bp-tablet) and (max-width: $bp-desktop - 0.02) {
+    display: block;
+  }
+
+  .pricing-table {
+    min-width: $label-col-tablet + 5 * $county-col-min;
+
+    tr > :first-child {
+      width: $label-col-tablet;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      border-right: 1px solid var(--exos-new-border-default-light);
+    }
+    tr > :nth-child(2) { border-left: 0; }
+  }
+
+  .pricing-county-head {
+    height: 45px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    color: var(--exos-new-text-body-secondary);
+  }
+
+  tbody td,
+  tbody th { height: 72px; }
+
+  .pricing-check {
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+// ── <768: stacked blocks ──────────────────────────────────────────────────
+.pricing-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  @media (min-width: $bp-tablet) {
+    display: none;
+  }
+}
+
+.pricing-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  & + & {
+    padding-top: 32px;
+    border-top: 1px solid var(--exos-new-border-default-lighter);
+  }
+}
+
+.pricing-block-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  cursor: pointer;
+
+  .form-check-input {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+  }
+}
+
+.pricing-block-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.pricing-block-title {
+  font-weight: 700;
+  color: var(--exos-new-text-body-secondary);
+}
+
+.pricing-block-desc {
+  color: var(--exos-new-text-body-tertiary);
+}
+
+.pricing-block-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pricing-block-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--exos-new-text-body-secondary);
+
+  .pricing-fee-input { margin: 0; }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────
+.pricing-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--exos-new-border-default-lighter);
+
+  .btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 14px 24px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  @media (min-width: $bp-tablet) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .btn { width: 125px; }
+  }
+}

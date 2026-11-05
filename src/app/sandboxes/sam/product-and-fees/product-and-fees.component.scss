@@ -312,8 +312,28 @@ $signup-circles-min-width: 1450px;
     padding: 100px;
   }
 
-  .layout-shell.is-my-info .layout-body,
-  .layout-shell.is-product-fees .layout-body {
+  .layout-shell.is-my-info .layout-body {
     padding: 48px 100px;
+  }
+}
+
+// Products & Pricing card mocks (683:8835 / 683:8694): 40px gutters and a
+// 1620px measure so the card stretches with the viewport next to the sidebar.
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-product-fees {
+    .layout-body {
+      padding: 48px 40px;
+    }
+
+    .layout-container {
+      max-width: 1620px;
+    }
+  }
+}
+
+// 768-1369 mocks use 60px side gutters (card = viewport - 120).
+@media (min-width: 768px) and (max-width: $sidenav-breakpoint - 1) {
+  .layout-shell.is-product-fees .layout-body {
+    padding-inline: 60px;
   }
 }
