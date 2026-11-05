@@ -48,7 +48,7 @@
               ]
             },
             "scripts": [],
-            "baseHref": "/enterpriseportal/exos-prototypes/"
+            "baseHref": "/sams-tests/"
           },
           "configurations": {
             "local": {
@@ -64,7 +64,7 @@
                   "maximumError": "70kb"
                 }
               ],
-              "baseHref": "/enterpriseportal/exos-prototypes/",
+              "baseHref": "/sams-tests/",
               "outputHashing": "media",
               "sourceMap": true,
               "optimization": false,
@@ -84,7 +84,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/enterpriseportal/exos-prototypes/",
+              "baseHref": "/sams-tests/",
               "optimization": {
                 "styles": {
                   "inlineCritical": false
@@ -101,7 +101,7 @@
               "extractLicenses": false,
               "sourceMap": true,
               "outputHashing": "media",
-              "baseHref": "/enterpriseportal/exos-prototypes/"
+              "baseHref": "/sams-tests/"
             }
           },
           "defaultConfiguration": "production"

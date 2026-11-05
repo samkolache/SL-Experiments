@@ -8,7 +8,7 @@ It uses the same Angular 20 / Bootstrap 5.3.8 versions (from the original lockfi
 
 ```bash
 npm install
-npm start          # http://localhost:4200/enterpriseportal/exos-prototypes/sam
+npm start          # http://localhost:4200/sams-tests/sam
 ```
 
 `npm run serve:local` runs the server on port 58530, the same as the main repo.
