@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/
 import { ThemeService, ThemeName } from '../../../services/theme.service';
 import { MilestoneHeaderComponent } from '../product-and-fees/milestone-header/milestone-header';
 import { MilestoneSidebarComponent } from '../product-and-fees/milestone-sidebar/milestone-sidebar';
-import { ProductsPricingCardComponent } from './products-pricing-card/products-pricing-card';
+import { ProductPricingCardComponent } from './product-pricing-card/product-pricing-card';
 import { StepIconItem } from '../product-and-fees/step-icon-header/step-icon-header';
 import { HEADER_STEPS, SIDEBAR_STEPS, ACTIVE_STEP_INDEX } from '../product-and-fees/product-and-fees.data';
 
@@ -14,7 +14,7 @@ import { HEADER_STEPS, SIDEBAR_STEPS, ACTIVE_STEP_INDEX } from '../product-and-f
 @Component({
   selector: 'app-product-and-fees-mcp',
   standalone: true,
-  imports: [MilestoneHeaderComponent, MilestoneSidebarComponent, ProductsPricingCardComponent],
+  imports: [MilestoneHeaderComponent, MilestoneSidebarComponent, ProductPricingCardComponent],
   templateUrl: './product-and-fees-mcp.component.html',
   styleUrl: './product-and-fees-mcp.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
