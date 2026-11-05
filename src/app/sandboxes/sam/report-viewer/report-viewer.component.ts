@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 /**
  * Full-page viewer for a self-contained HTML build report.
  * The report path comes from route data (`reportSrc`) and is resolved against
- * the app's base href, e.g. `reports/mcp/products-pricing-card-report.html`.
+ * the app's base href, e.g. `reports/mcp-real/products-pricing-card-report.html`.
  * The files are copied into the build output by the `reports` asset entry in
  * angular.json.
  */

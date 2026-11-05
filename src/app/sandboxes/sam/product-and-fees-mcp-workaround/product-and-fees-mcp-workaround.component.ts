@@ -12,14 +12,14 @@ import { HEADER_STEPS, SIDEBAR_STEPS, ACTIVE_STEP_INDEX } from '../product-and-f
  * it while mounted and restores whatever theme was active before on leave.
  */
 @Component({
-  selector: 'app-product-and-fees-mcp',
+  selector: 'app-product-and-fees-mcp-workaround',
   standalone: true,
   imports: [MilestoneHeaderComponent, MilestoneSidebarComponent, ProductPricingCardComponent],
-  templateUrl: './product-and-fees-mcp.component.html',
-  styleUrl: './product-and-fees-mcp.component.scss',
+  templateUrl: './product-and-fees-mcp-workaround.component.html',
+  styleUrl: './product-and-fees-mcp-workaround.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductAndFeesMcpComponent implements OnDestroy {
+export class ProductAndFeesMcpWorkaroundComponent implements OnDestroy {
   private readonly themeService = inject(ThemeService);
   private readonly previousTheme: ThemeName = this.themeService.active();
 
