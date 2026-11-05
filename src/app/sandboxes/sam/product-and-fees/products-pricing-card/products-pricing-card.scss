@@ -1,0 +1,387 @@
+@use '../styles/variables' as *;
+
+// Layout bands (Figma frames 683:8835 … 683:9691).
+// ≥934 matrix (products = columns) · 767–933 swapped axes · ≤766 stacked.
+$bp-swap: 767px;
+$bp-matrix: 934px;
+
+$pp-border: $color-border-light;                                   // #bfcad5
+$pp-head-bg: $color-surface-screen;                                // #edf1f7
+$pp-input-border: var(--exos-new-border-default-primary, #{$color-border-primary});
+$pp-banner-bg: var(--exos-new-bg-action-lighter, #eff7fe);
+$pp-county-col: 134px;     // matrix: counties column
+$pp-product-col: 178px;    // swapped: products column
+$pp-fee-col-min: 125px;    // 101px input + 2×12px cell padding
+
+@mixin swapped { @media (min-width: $bp-swap) and (max-width: $bp-matrix - 0.02) { @content; } }
+@mixin matrix  { @media (min-width: $bp-matrix) { @content; } }
+@mixin stacked { @media (max-width: $bp-swap - 0.02) { @content; } }
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+// ── Card shell ─────────────────────────────────────────────────────────────
+.pp-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  margin: 0;
+  padding: 32px;
+  border: none;
+  border-radius: 12px;
+  background: $card-background-gradient;
+  box-shadow: $card-box-shadow;
+
+  @include stacked {
+    @include card-gradient-background; // blue→periwinkle strip, mobile only
+    gap: 20px;
+    padding: 24px 16px 20px;
+  }
+}
+
+.pp-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: 0.45px;
+  color: $color-text-primary;
+
+  @include stacked {
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0;
+  }
+}
+
+.pp-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+// ── Banner (existing .banner markup, restyled) ─────────────────────────────
+.pp-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid $color-action-primary;
+  border-radius: 5px;
+  background: $pp-banner-bg;
+
+  .icon-attention-circle-fill {
+    flex: none;
+    margin: 2px 0 0; // drop Exos' 12px margin-right; the flex gap spaces it
+
+    font-size: 20px;
+    line-height: 20px;
+    color: $color-action-primary;
+  }
+
+  // Exos .banner .text is a flex row; the steps must stack as a list.
+  .text {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding-left: 18px;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-text-secondary;
+
+    li { display: list-item; }
+  }
+}
+
+// ── Fee grid ───────────────────────────────────────────────────────────────
+.pp-scroll {
+  border: 1px solid $pp-border;
+  border-radius: 8px;
+  overflow: hidden;
+  background: $color-surface-white;
+
+  @include swapped { overflow-x: auto; }
+
+  @include stacked {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
+}
+
+.pp-grid {
+  display: grid;
+
+  @include matrix {
+    grid-template-columns: $pp-county-col repeat(var(--products), minmax(0, 1fr));
+  }
+
+  // Swapped and stacked both follow DOM order (corner, county heads, then a
+  // product head + its county cells per product), so they need no placement.
+  @include swapped {
+    grid-template-columns: $pp-product-col repeat(var(--counties), minmax($pp-fee-col-min, 1fr));
+  }
+
+  @include stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+// Shared table-cell look (matrix + swapped).
+.pp-corner,
+.pp-county-head,
+.pp-product-head,
+.pp-cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 12px;
+  border: 0 solid $pp-border;
+  background: $color-surface-white;
+  color: $color-text-secondary;
+}
+
+.pp-corner {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  background: $pp-head-bg;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+
+  @include swapped {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    span { visibility: hidden; }
+  }
+}
+
+.pp-county-head {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.pp-product-head {
+  gap: 8px;
+  background: $pp-head-bg;
+
+  .form-check-input {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+  }
+}
+
+.pp-product-name {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  color: $color-text-secondary;
+  cursor: pointer;
+
+  .icon-info-circle {
+    flex: none;
+    font-size: 14px;
+    color: $color-action-primary;
+  }
+}
+
+.pp-product-desc,
+.pp-cell-county {
+  display: none;
+}
+
+.pp-cell {
+  justify-content: center;
+}
+
+// ── ≥934: products are columns, counties are rows ──────────────────────────
+@include matrix {
+  .pp-corner { grid-area: 1 / 1; }
+
+  .pp-county-head {
+    grid-row: calc(var(--c) + 2);
+    grid-column: 1;
+    border-right-width: 1px;
+    &:not(.is-last-c) { border-bottom-width: 1px; }
+  }
+
+  .pp-product-head {
+    grid-row: 1;
+    grid-column: calc(var(--p) + 2);
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-bottom-width: 1px;
+    &:not(.is-last-p) { border-right-width: 1px; }
+  }
+
+  .pp-cell {
+    grid-row: calc(var(--c) + 2);
+    grid-column: calc(var(--p) + 2);
+    &:not(.is-last-p) { border-right-width: 1px; }
+    &:not(.is-last-c) { border-bottom-width: 1px; }
+  }
+}
+
+// ── 767–933: axes swap — products are rows, counties are columns ───────────
+@include swapped {
+  .pp-county-head {
+    justify-content: center;
+    background: $pp-head-bg;
+    border-bottom-width: 1px;
+  }
+
+  .pp-product-head {
+    position: sticky; // stays put if the county columns scroll sideways
+    left: 0;
+    z-index: 1;
+    background: $color-surface-white;
+    border-right-width: 1px;
+    &:not(.is-last-p) { border-bottom-width: 1px; }
+  }
+
+  .pp-cell:not(.is-last-p) { border-bottom-width: 1px; }
+}
+
+// ── ≤766: one block per product, one row per county ────────────────────────
+@include stacked {
+  .pp-corner,
+  .pp-county-head,
+  .pp-product-name .icon-info-circle {
+    display: none;
+  }
+
+  .pp-product-head,
+  .pp-cell {
+    padding: 0;
+    background: transparent;
+  }
+
+  .pp-product-head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: 10px;
+    row-gap: 4px;
+
+    .form-check-input { margin-top: 2px; }
+
+    // Divider + breathing room between product blocks.
+    &:not(.is-first-p) {
+      margin-top: 8px;
+      padding-top: 20px;
+      border-top: 1px solid $color-border-lighter;
+    }
+  }
+
+  .pp-product-name {
+    flex: 1 1 0;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .pp-product-desc {
+    display: block;
+    flex-basis: 100%;
+    margin: 0 0 4px 26px; // aligns under the name (16px box + 10px gap)
+    font-size: 14px;
+    line-height: 21px;
+    color: $color-text-tertiary;
+  }
+
+  .pp-cell {
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .pp-cell-county {
+    display: block;
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+
+// ── Fee input (existing input-group markup, restyled to the mock) ──────────
+.pp-fee {
+  flex-wrap: nowrap;
+  width: 101px;
+  max-width: 100%;
+  height: 44px;
+
+  .input-group-text,
+  .form-control {
+    height: 44px;
+    border: 1px solid $pp-input-border;
+    font-size: 16px;
+    color: $color-text-primary;
+  }
+
+  .input-group-text {
+    flex: none;
+    justify-content: center;
+    width: 36px;
+    padding: 0;
+    background: $color-surface-light;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .form-control {
+    min-width: 0;
+    padding: 10px 12px;
+    text-align: right;
+    background: $color-surface-white;
+    border-radius: 0 4px 4px 0;
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &:focus {
+      border-color: $color-action-primary;
+      box-shadow: $input-focus-box-shadow;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+// ── Footer ─────────────────────────────────────────────────────────────────
+.pp-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid $color-border-lighter;
+
+  .btn { min-width: 125px; }
+
+  @include stacked {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+
+    .btn { width: 100%; }
+  }
+}

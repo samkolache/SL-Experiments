@@ -1,0 +1,55 @@
+<div class="card pp-card">
+  <h1 class="pp-title">Confirm Products &amp; Pricing</h1>
+
+  <div class="pp-body">
+    <!-- Existing banner markup, new copy + attention icon -->
+    <div class="banner banner-primary pp-banner" role="alert">
+      <span class="icon-attention-circle-fill" aria-hidden="true"></span>
+      <ol class="text">
+        <li class="fw-bold">The fees below have been pre-populated to reflect current competitive market rates.</li>
+        <li>Products will be considered <span class="fw-bold">quote-only</span> if you don’t assign fees.</li>
+        <li><span class="fw-bold">Uncheck</span> any products you do not wish to fulfill.</li>
+      </ol>
+    </div>
+
+    <!-- Placement of every child is set in SCSS from --p / --c (see .ts). -->
+    <div class="pp-scroll">
+      <div class="pp-grid" [style.--products]="products.length" [style.--counties]="counties.length">
+        <div class="pp-corner"><span>Counties</span></div>
+
+        @for (county of counties; track county; let c = $index, lastC = $last) {
+        <div class="pp-county-head" [class.is-last-c]="lastC" [style.--c]="c">{{ county }}</div>
+        }
+
+        @for (product of products; track product.key; let p = $index, firstP = $first, lastP = $last) {
+        <div class="pp-product-head" [class.is-first-p]="firstP" [class.is-last-p]="lastP" [style.--p]="p">
+          <input type="checkbox" class="form-check-input" [id]="'pp-' + product.key" checked />
+          <label class="pp-product-name" [for]="'pp-' + product.key">
+            <span>{{ product.name }}</span>
+            <span class="icon-info-circle" [attr.title]="product.description" aria-hidden="true"></span>
+          </label>
+          <p class="pp-product-desc">{{ product.description }}</p>
+        </div>
+
+        @for (county of counties; track county; let c = $index, lastC = $last) {
+        <div class="pp-cell" [class.is-last-p]="lastP" [class.is-last-c]="lastC" [style.--p]="p" [style.--c]="c">
+          <span class="pp-cell-county" aria-hidden="true">{{ county }}</span>
+          <!-- Existing fee input-group markup, restyled -->
+          <div class="input-group pp-fee">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount"
+                   [attr.aria-label]="county + ' ' + product.name + ' fee'"
+                   (wheel)="$any($event.target).blur()" [value]="defaultFee">
+          </div>
+        </div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-footer">
+    <button class="btn btn-outline-primary" type="button">BACK</button>
+    <button class="btn btn-primary" type="button">CONTINUE</button>
+  </div>
+</div>
