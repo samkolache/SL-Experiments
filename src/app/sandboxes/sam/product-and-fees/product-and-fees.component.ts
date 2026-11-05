@@ -2,7 +2,8 @@ import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/
 import { ThemeService, ThemeName } from '../../../services/theme.service';
 import { MilestoneHeaderComponent } from './milestone-header/milestone-header';
 import { MilestoneSidebarComponent } from './milestone-sidebar/milestone-sidebar';
-import { ProductAndFeesCardComponent } from './product-and-fees-card/product-and-fees-card';
+// import { ProductAndFeesCardComponent } from './product-and-fees-card/product-and-fees-card';
+import { ProductPricingCardComponent } from './product-pricing-card/product-pricing-card';
 import { StepIconItem } from './step-icon-header/step-icon-header';
 import { HEADER_STEPS, SIDEBAR_STEPS, ACTIVE_STEP_INDEX } from './product-and-fees.data';
 
@@ -14,7 +15,7 @@ import { HEADER_STEPS, SIDEBAR_STEPS, ACTIVE_STEP_INDEX } from './product-and-fe
 @Component({
   selector: 'app-onboarding-layout',
   standalone: true,
-  imports: [MilestoneHeaderComponent, MilestoneSidebarComponent, ProductAndFeesCardComponent],
+  imports: [MilestoneHeaderComponent, MilestoneSidebarComponent, /* ProductAndFeesCardComponent, */ ProductPricingCardComponent],
   templateUrl: './product-and-fees.component.html',
   styleUrl: './product-and-fees.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
