@@ -16,7 +16,7 @@ The reports were written before the code was split into separate routes, so file
 
 The two report HTML files are copied into the build output (`dist/reports/`) by an asset entry in `angular.json`, and shown full-page at:
 
-- `/sam/product-and-fees-api/report`
-- `/sam/product-and-fees-mcp/report`
+- `/sams-tests/sam/product-and-fees-api/report`
+- `/sams-tests/sam/product-and-fees-mcp/report`
 
-The raw files are also served directly at `reports/api/products-pricing-card-report.html` and `reports/mcp/products-pricing-card-report.html` under the app's base href.
+The raw files are also served directly at `reports/api/products-pricing-card-report.html` and `reports/mcp/products-pricing-card-report.html` under `/sams-tests/`.

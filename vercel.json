@@ -4,5 +4,6 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "redirects": [{ "source": "/", "destination": "/sams-tests/sam", "permanent": false }],
+  "rewrites": [{ "source": "/sams-tests/(.*)", "destination": "/sams-tests/index.html" }]
 }
