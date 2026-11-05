@@ -1,0 +1,319 @@
+@use '../product-and-fees/styles/color-tokens' as *;
+@use '../product-and-fees/styles/variables' as var;
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+
+$sidenav-breakpoint: 1370px;
+
+// ── VendorOnBoardingSpa src/styles.scss globals ─────────────────────────────
+// VOB applies these app-wide after the exos theme. They are scoped to this
+// page's root via :where() so they keep the original selector specificity
+// (h1/p/label = 0,0,1) and don't leak into the rest of the prototypes app.
+.vob-pf-root {
+  --bs-body-color: #05152a;
+  color: var(--bs-body-color);
+}
+
+::ng-deep :where(.vob-pf-root) :is(h1, h2, h3, h4, h5, h6, p) {
+  color: #05152a;
+}
+
+::ng-deep :where(.vob-pf-root) label {
+  margin-bottom: .375rem;
+}
+
+$signup-circles-min-width: 1450px;
+
+
+
+
+
+.signup-circle,
+.signup-circle-bottom {
+  display: block;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.signup-circle {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 198px;
+  height: 395px;
+}
+
+.signup-circle-bottom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 215px;
+  height: 253px;
+}
+
+
+@media (max-width: 767.98px) {
+  .signup-circle,
+  .signup-circle-bottom {
+    display: none;
+  }
+}
+
+.layout-shell {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var.$gradient-04;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-x: clip;
+  position: relative;
+  z-index: 0;
+}
+
+
+.layout-header {
+  display: block;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  @media (min-width: $sidenav-breakpoint) {
+    display: none;
+
+    &.is-progress {
+      display: block;
+    }
+  }
+}
+
+
+.layout-body {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px 48px;
+  box-sizing: border-box;
+  @include media-breakpoint-up(md) {
+    padding-top: 60px;
+    padding-inline: 68px;
+    padding-bottom: 80px;
+  }
+
+  &.is-progress {
+    padding: 32px 16px 40px;
+    @media (min-width: 770px) {
+      padding: 64px 68px 80px 68px;
+    }
+
+    // The ending screen has its own gutters and starts one breakpoint earlier.
+    // Needs both classes, so plain /progress above keeps its 770px rule intact.
+    &.is-ending-screen {
+      @media (min-width: 757px) {
+        padding: 40px 68px 80px;
+      }
+    }
+  }
+}
+
+
+.layout-container {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+
+  @media (min-width: $sidenav-breakpoint) {
+    max-width: 1168px;
+    gap: 48px;
+    align-items: stretch;
+    min-height: 695px;
+  }
+}
+
+
+// The ending screen runs wider than the 1168px measure the stepper screens use.
+// The marker sits on .layout-body, not .layout-shell, because the shell can't
+// tell the branch from the URL - see ProgressLayoutState.
+@media (min-width: $sidenav-breakpoint) {
+  .layout-body.is-ending-screen .layout-container {
+    max-width: 1300px;
+  }
+}
+
+
+.layout-sidenav {
+  display: none;
+
+  @media (min-width: $sidenav-breakpoint) {
+    display: block;
+    flex: none;
+    width: 360px;
+  }
+}
+
+
+.layout-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+
+@media (max-width: 767.98px) {
+  .layout-shell.is-coverage {
+    background: none;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+
+    .layout-header {
+      position: relative;
+      // Above the county search sheet (z-index: 6 in coverage.scss) so the
+      // hamburger menu stays clickable/visible over it on mobile.
+      z-index: 7;
+    }
+
+    .signup-circle,
+    .signup-circle-bottom {
+      z-index: -1;
+    }
+
+    .layout-body {
+      padding: 0;
+    }
+  }
+}
+
+
+@media (min-width: 611px) and (max-width: $sidenav-breakpoint - 1) {
+  .layout-shell.is-availability .layout-body {
+    padding-inline: 68px;
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-availability {
+    .layout-body {
+      padding: 48px 40px;
+    }
+
+    .layout-container {
+      max-width: 1620px;
+    }
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-w9 {
+    .layout-body {
+      padding: 100px;
+    }
+
+    .layout-container {
+      min-height: 695px;
+      align-items: stretch;
+    }
+
+    .layout-content {
+      align-items: stretch;
+    }
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-profile-photo {
+    .layout-body {
+      padding: 100px;
+    }
+
+    .layout-container {
+      min-height: 695px;
+      align-items: stretch;
+    }
+
+    .layout-content {
+      align-items: stretch;
+    }
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-geo-comp .layout-body,
+  .layout-shell.is-ach .layout-body {
+    padding: 100px;
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-parev1832 {
+    .layout-body {
+      padding: 100px;
+    }
+
+    .layout-container {
+      min-height: 695px;
+      align-items: stretch;
+    }
+
+    .layout-content {
+      align-items: stretch;
+    }
+  }
+}
+
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-w9.is-sign-step .layout-body,
+  .layout-shell.is-ach.is-sign-step .layout-body,
+  .layout-shell.is-parev1832.is-sign-step .layout-body,
+  .layout-shell.is-geo-comp.is-sign-step .layout-body {
+    padding: 48px 40px;
+  }
+
+  .layout-shell.is-w9.is-sign-step .layout-container,
+  .layout-shell.is-ach.is-sign-step .layout-container,
+  .layout-shell.is-parev1832.is-sign-step .layout-container,
+  .layout-shell.is-geo-comp.is-sign-step .layout-container {
+    max-width: none;
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-coverage {
+    .layout-body {
+      padding: 48px 40px;
+    }
+
+    .layout-container {
+      max-width: 1620px;
+    }
+  }
+}
+
+
+@media (min-width: $sidenav-breakpoint) {
+  .layout-shell.is-licenses .layout-body {
+    padding: 100px;
+  }
+
+  .layout-shell.is-my-info .layout-body,
+  .layout-shell.is-product-fees .layout-body {
+    padding: 48px 100px;
+  }
+}

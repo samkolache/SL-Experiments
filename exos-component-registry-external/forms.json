@@ -1,0 +1,158 @@
+{
+  "id": "exos-forms",
+  "component": "Forms",
+  "element": null,
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/exos-theme/_forms.scss",
+      "src/scss/exos-theme/_custom-controls.scss",
+      "src/scss/bootstrap-theme/_forms.scss",
+      "src/scss/bootstrap-theme/_custom-forms.scss",
+      "src/scss/mixins/_custom-controls.scss",
+      "src/scss/exos-theme/_utilities.scss"
+    ]
+  },
+  "description": "Form controls for collecting input. This theme restyles Bootstrap 5 form controls: text inputs/selects share a common field treatment (44px tall, 4px radius, gray border that turns primary-blue on focus, light-gray fill when disabled/readonly). Checkboxes, radios and switches use the Bootstrap 5 form-check / form-check-input path (the theme styles these directly, including a danger-bordered required state). Validation uses is-invalid + invalid-feedback. NOTE: legacy BS4 custom-control-* selectors still exist in the SCSS but are residual — prefer the form-check path modeled here.",
+  "baseClass": null,
+  "tokens": {
+    "field-height": "44px",
+    "field-height-sm": "36px",
+    "border-radius": "0.25rem",
+    "font-size": "1rem",
+    "padding-x": "0.75rem"
+  },
+  "rules": {
+    "always": [
+      "Every text input / select gets `form-control` or `form-select`; every checkbox/radio/switch input gets `form-check-input`.",
+      "Pair each control with a `<label>`; use `form-label` for the field label and `form-check-label` for checkbox/radio/switch labels.",
+      "Wrap checkbox/radio/switch input+label in a `.form-check` (add `.form-switch` for switches).",
+      "Mark a required field's label with `required-field` to render the asterisk."
+    ],
+    "never": [
+      "Do not apply `form-control` to a checkbox/radio/switch — use `form-check-input`.",
+      "Do not use a CSS class for disabled/readonly/required — use the matching HTML attribute.",
+      "Do not add `is-valid` styling for normal fields; the theme strips the green valid treatment, so it has no visual effect.",
+      "Do not use the legacy `custom-control-*` / `custom-select` classes for new markup — use the form-check / form-select path."
+    ]
+  },
+  "a11y": [
+    "Every control needs an associated label: either a `<label for>` matching the control id, or the label wrapping the input.",
+    "Set `aria-invalid=\"true\"` on a control showing `is-invalid`, and associate it with the `.invalid-feedback` message via `aria-describedby`.",
+    "Group related radios/checkboxes in a `<fieldset>` with a `<legend>`."
+  ],
+  "axes": {
+    "control": {
+      "description": "Which kind of form control to render.",
+      "type": "class",
+      "options": {
+        "text":     { "class": "form-control", "origin": "exos", "note": "Single/multi-line text, email, number, password, textarea." },
+        "select":   { "class": "form-select", "origin": "exos", "note": "Native dropdown." },
+        "checkbox": { "class": "form-check-input", "origin": "exos", "note": "Use on an <input type=\"checkbox\"> inside a .form-check." },
+        "radio":    { "class": "form-check-input", "origin": "exos", "note": "Use on an <input type=\"radio\"> inside a .form-check." },
+        "switch":   { "class": "form-check-input", "origin": "exos", "note": "Use on an <input type=\"checkbox\"> inside a .form-check.form-switch." },
+        "datepicker": { "class": "custom-date-picker", "origin": "exos", "note": "Date input styled like a form-select with a calendar affordance." },
+        "timepicker": { "class": "custom-time-picker", "origin": "exos", "note": "Time input styled like a form-select with a clock icon." }
+      }
+    },
+    "size": {
+      "description": "Control height for text inputs / selects. Default (md) is the 44px field; sm is 36px. Append to the control class, e.g. `form-control form-control-sm` or `form-select form-select-lg`.",
+      "type": "class",
+      "options": {
+        "input-sm":  { "class": "form-control-sm", "origin": "exos", "note": "Use with form-control." },
+        "select-sm": { "class": "form-select-sm", "origin": "exos", "note": "Use with form-select." },
+        "md": null,
+        "input-lg":  { "class": "form-control-lg", "origin": "exos", "note": "Bootstrap built-in; use with form-control." },
+        "select-lg": { "class": "form-select-lg", "origin": "exos", "note": "Bootstrap built-in; use with form-select." }
+      }
+    },
+    "validation": {
+      "description": "Server-side validation state applied to the control (the theme styles the invalid state; valid is intentionally neutralized).",
+      "type": "class",
+      "options": {
+        "none": null,
+        "invalid": { "class": "is-invalid", "origin": "exos", "note": "Red border + attention icon; pair with a sibling .invalid-feedback." }
+      }
+    },
+    "alignment": {
+      "description": "Text alignment of the input value.",
+      "type": "class",
+      "options": {
+        "left": null,
+        "right": { "class": "right-aligned", "origin": "exos", "note": "Right-aligns the value, e.g. for currency/amount inputs." }
+      }
+    },
+    "state": {
+      "description": "Interactive state, applied as an HTML attribute (not a class).",
+      "type": "attribute",
+      "options": {
+        "default": null,
+        "disabled": { "attribute": "disabled" },
+        "readonly": { "attribute": "readonly" },
+        "required": { "attribute": "required", "note": "On checkbox/radio/switch this triggers the danger-bordered required treatment; pair the label with .required-field for the visible asterisk." }
+      }
+    }
+  },
+  "structure": {
+    "root": { "element": "div", "class": "form-group", "note": "Optional wrapper grouping a label, control and feedback. Bootstrap utility margins (mb-*) are an equally valid alternative.", "slots": ["form-label", "form-control", "form-select", "form-check", "invalid-feedback"] },
+    "children": [
+      { "element": "label", "class": "form-label", "optional": true, "note": "Field label; add `required-field` to show the required asterisk." },
+      { "element": "input", "class": "form-control", "optional": true, "note": "Text-style control; swap for .form-select on a <select>." },
+      { "element": "div", "class": "invalid-feedback", "optional": true, "note": "Validation message shown when the control has .is-invalid (Bootstrap built-in)." },
+      { "element": "div", "class": "form-check", "optional": true, "repeatable": true, "note": "Wrapper for one checkbox/radio/switch; add .form-switch for switches.", "slots": ["form-check-input", "form-check-label", "invalid-feedback"] }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Labelled text input",
+      "intent": "Standard single-line text field with a label.",
+      "html": "<div class=\"form-group\">\n  <label for=\"email\" class=\"form-label\">Email address</label>\n  <input type=\"email\" id=\"email\" class=\"form-control\" placeholder=\"name@company.com\">\n</div>"
+    },
+    {
+      "name": "Required input with validation",
+      "intent": "A required field showing the asterisk and an invalid state with a message.",
+      "html": "<div class=\"form-group\">\n  <label for=\"ein\" class=\"form-label required-field\">Employer ID</label>\n  <input type=\"text\" id=\"ein\" class=\"form-control is-invalid\" aria-invalid=\"true\" aria-describedby=\"ein-err\" required>\n  <div id=\"ein-err\" class=\"invalid-feedback\">Employer ID is required.</div>\n</div>"
+    },
+    {
+      "name": "Select",
+      "intent": "Native dropdown selection.",
+      "html": "<div class=\"form-group\">\n  <label for=\"state\" class=\"form-label\">State</label>\n  <select id=\"state\" class=\"form-select\">\n    <option selected disabled value=\"\">Choose…</option>\n    <option value=\"CA\">California</option>\n    <option value=\"NY\">New York</option>\n  </select>\n</div>"
+    },
+    {
+      "name": "Checkbox",
+      "intent": "Single boolean opt-in.",
+      "html": "<div class=\"form-check\">\n  <input type=\"checkbox\" id=\"terms\" class=\"form-check-input\">\n  <label for=\"terms\" class=\"form-check-label\">I agree to the terms</label>\n</div>"
+    },
+    {
+      "name": "Radio group",
+      "intent": "Pick one of several options.",
+      "html": "<fieldset>\n  <legend class=\"form-label\">Contact method</legend>\n  <div class=\"form-check\">\n    <input type=\"radio\" id=\"by-email\" name=\"contact\" class=\"form-check-input\">\n    <label for=\"by-email\" class=\"form-check-label\">Email</label>\n  </div>\n  <div class=\"form-check\">\n    <input type=\"radio\" id=\"by-phone\" name=\"contact\" class=\"form-check-input\">\n    <label for=\"by-phone\" class=\"form-check-label\">Phone</label>\n  </div>\n</fieldset>"
+    },
+    {
+      "name": "Switch",
+      "intent": "On/off toggle.",
+      "html": "<div class=\"form-check form-switch\">\n  <input type=\"checkbox\" id=\"notify\" class=\"form-check-input\" role=\"switch\">\n  <label for=\"notify\" class=\"form-check-label\">Email me updates</label>\n</div>"
+    },
+    {
+      "name": "Disabled input",
+      "intent": "Field not currently editable.",
+      "html": "<input type=\"text\" class=\"form-control\" value=\"Locked\" disabled>"
+    },
+    {
+      "name": "Small select",
+      "intent": "Compact 36px select, e.g. inside a table row or toolbar.",
+      "html": "<select class=\"form-select form-select-sm\"><option>10</option><option>25</option></select>"
+    }
+  ],
+  "inference": [
+    { "when": ["text", "email", "name", "address", "number", "textarea", "input"], "use": { "control": "text" } },
+    { "when": ["dropdown", "select", "choose one", "picklist"], "use": { "control": "select" } },
+    { "when": ["agree", "opt in", "toggle one", "checkbox", "consent"], "use": { "control": "checkbox" } },
+    { "when": ["pick one", "either", "single choice", "radio"], "use": { "control": "radio" } },
+    { "when": ["on off", "enable", "toggle", "switch"], "use": { "control": "switch" } },
+    { "when": ["date", "calendar", "date of birth"], "use": { "control": "datepicker" } },
+    { "when": ["time", "clock"], "use": { "control": "timepicker" } },
+    { "when": ["error", "validation failed", "invalid"], "use": { "validation": "invalid" } },
+    { "when": ["required", "mandatory"], "use": { "state": "required" } }
+  ]
+}

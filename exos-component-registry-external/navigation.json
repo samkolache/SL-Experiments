@@ -1,0 +1,140 @@
+{
+  "id": "exos-navigation",
+  "component": "Navigation",
+  "element": null,
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/bootstrap-theme/_nav-bar.scss",
+      "src/scss/exos-theme/_application-navigation.scss",
+      "src/scss/bootstrap-theme/_pagination.scss",
+      "src/scss/exos-theme/_pagination-footer.scss",
+      "src/scss/exos-theme/_drop-down.scss"
+    ]
+  },
+  "description": "The navigation family covers four sub-patterns wired to the exos theme: (1) the application top navbar (`.navbar.navbar-expand`, with primary/secondary bars and an exos `.nav-item-logo` slot), (2) side / list-group navigation (`.side-navigation` whose active item gets a primary left border), (3) pagination — Bootstrap `.pagination` plus the exos `.pagination-footer` toolbar wrapping page links with per-page and showing-text controls, and (4) dropdown menus (Bootstrap `.dropdown` re-shadowed by the theme, with the exos `.nav-dropdown` item styling). Pick a sub-pattern via the `variant` axis. Several theme refinements are scoped to compound selectors (e.g. `.navbar.top-primary-navigation`) and are applied by combining classes in markup rather than as standalone modifiers.",
+  "baseClass": null,
+  "tokens": {
+    "navbar-link-font-size": "0.75rem",
+    "side-nav-item-font-size": "0.75rem",
+    "side-nav-active-border": "primary",
+    "dropdown-menu-shadow": "box-shadow",
+    "pagination-footer-border-top": "gray-3"
+  },
+  "rules": {
+    "always": [
+      "Wrap primary navigation landmarks in a <nav> element (or role=\"navigation\") with a descriptive aria-label.",
+      "Mark the current page/item with aria-current (`page` for nav links, `true` for the active list-group/dropdown item).",
+      "On a dropdown toggle, set aria-expanded to reflect open/closed state and aria-haspopup where appropriate."
+    ],
+    "never": [
+      "Do not treat `top-primary-navigation`, `top-secondary-navigation`, `striped-list`, or `solid-list` as standalone classes — they only take effect when combined with `.navbar` / `.list-group` (use them together in markup).",
+      "Do not omit aria-current on the active navigation item.",
+      "Do not nest interactive controls inside a .page-link other than the link/button itself."
+    ]
+  },
+  "a11y": [
+    "Each navigation region needs a landmark: <nav aria-label=\"Main\"> for the primary bar, <nav aria-label=\"Pagination\"> around .pagination.",
+    "Set aria-current=\"page\" on the active .nav-link / .page-link and aria-current=\"true\" on the active .list-group-item.",
+    "Disabled .page-item links should carry tabindex=\"-1\" and aria-disabled=\"true\".",
+    "Dropdown toggles must expose aria-expanded and link the menu via the menu/aria semantics."
+  ],
+  "axes": {
+    "variant": {
+      "description": "Which navigation sub-pattern to build. Pick one.",
+      "type": "class",
+      "options": {
+        "navbar": { "class": "navbar", "origin": "exos", "note": "Application top bar. Combine with `.navbar-expand` and, in markup, `.top-primary-navigation` / `.top-secondary-navigation` for the two exos bars. Contains `.nav-item` / `.nav-link`; logo slot is `.nav-item-logo`." },
+        "side-nav": { "class": "side-navigation", "origin": "exos", "note": "Vertical nav rendered as a `.list-group`; the active `.list-group-item` gets a primary-colored left border." },
+        "pagination": { "class": "pagination", "origin": "exos", "note": "Bootstrap built-in page navigation made of `.page-item` > `.page-link`." },
+        "dropdown": { "class": "dropdown", "origin": "exos", "note": "Bootstrap built-in dropdown; theme adds box-shadow to `.dropdown-menu`. Use `.nav-dropdown` on the menu for the exos nav item styling." }
+      }
+    },
+    "navbarExpand": {
+      "description": "Navbar horizontal expansion (apply only to the navbar variant).",
+      "type": "class",
+      "options": {
+        "none": null,
+        "always": { "class": "navbar-expand", "origin": "exos", "note": "Bootstrap built-in; keeps nav items inline at all breakpoints." }
+      }
+    },
+    "navbarTheme": {
+      "description": "Navbar color scheme (navbar variant).",
+      "type": "class",
+      "options": {
+        "default": null,
+        "dark": { "class": "bg-dark", "origin": "bootstrap", "colors": ["dark"], "note": "Dark navbar surface; the exos primary bar overrides this with --exos-navigation-background-color when combined with top-primary-navigation." }
+      }
+    },
+    "pageState": {
+      "description": "State of an individual pagination item (.page-item).",
+      "type": "class",
+      "options": {
+        "default": null,
+        "active": { "class": "active", "origin": "exos", "note": "Marks the current page; also set aria-current=\"page\" on its .page-link." },
+        "disabled": { "class": "disabled", "origin": "exos", "note": "Non-interactive page item (e.g. prev on the first page)." }
+      }
+    },
+    "listDensity": {
+      "description": "Density of list-group based navigation (side-nav / list-group variant).",
+      "type": "class",
+      "options": {
+        "default": null,
+        "compact": { "class": "list-group-items-compact", "origin": "exos", "note": "Exos-specific; reduces list-group item padding." },
+        "no-y-padding": { "class": "list-group-items-py-0", "origin": "exos", "note": "Exos-specific; removes top/bottom padding on list-group items." }
+      }
+    }
+  },
+  "structure": {
+    "root": { "element": "nav", "class": "navbar", "note": "Primary navbar example root; for other variants swap to .pagination / .list-group / .dropdown.", "slots": ["nav-item", "nav-item-logo", "dropdown"] },
+    "children": [
+      { "element": "div", "class": "nav-item-logo", "optional": true, "note": "Exos logo slot inside the top navbar.", "slots": ["nav-link"] },
+      { "element": "div", "class": "nav-item", "repeatable": true, "slots": ["nav-link"] },
+      { "element": "a", "class": "nav-link", "note": "Set aria-current=\"page\" when this is the active item." },
+      { "element": "ul", "class": "pagination", "optional": true, "note": "Pagination control; wrap in <nav aria-label=\"Pagination\">.", "slots": ["page-item"] },
+      { "element": "li", "class": "page-item", "optional": true, "repeatable": true, "slots": ["page-link"] },
+      { "element": "a", "class": "page-link", "optional": true },
+      { "element": "div", "class": "side-navigation", "optional": true, "note": "Vertical nav wrapper.", "slots": ["list-group"] },
+      { "element": "ul", "class": "list-group", "optional": true, "slots": ["list-group-item"] },
+      { "element": "li", "class": "list-group-item", "optional": true, "repeatable": true, "note": "Add .active and aria-current=\"true\" on the current item." },
+      { "element": "div", "class": "dropdown", "optional": true, "slots": ["dropdown-toggle", "dropdown-menu"] },
+      { "element": "button", "class": "dropdown-toggle", "optional": true, "note": "Set aria-expanded to reflect open state." },
+      { "element": "ul", "class": "dropdown-menu", "optional": true, "slots": ["dropdown-item"] },
+      { "element": "a", "class": "dropdown-item", "optional": true, "repeatable": true, "note": "Add .nav-dropdown on the menu for exos nav item styling." }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Application top navbar",
+      "intent": "Primary application navigation bar with a logo slot and inline links.",
+      "html": "<nav class=\"navbar navbar-expand top-primary-navigation bg-dark\" aria-label=\"Main\">\n  <div class=\"nav-item-logo\">\n    <a class=\"nav-link\" href=\"/\">Exos</a>\n  </div>\n  <div class=\"nav-item active\">\n    <a class=\"nav-link\" href=\"/home\" aria-current=\"page\">Home</a>\n  </div>\n  <div class=\"nav-item\">\n    <a class=\"nav-link\" href=\"/vendors\">Vendors</a>\n  </div>\n</nav>"
+    },
+    {
+      "name": "Side navigation",
+      "intent": "Vertical in-page navigation where the active item shows a primary left border.",
+      "html": "<nav class=\"side-navigation\" aria-label=\"Section\">\n  <ul class=\"list-group\">\n    <li class=\"list-group-item active\" aria-current=\"true\"><a href=\"/overview\">Overview</a></li>\n    <li class=\"list-group-item\"><a href=\"/details\">Details</a></li>\n    <li class=\"list-group-item\"><a href=\"/history\">History</a></li>\n  </ul>\n</nav>"
+    },
+    {
+      "name": "Pagination control",
+      "intent": "Page-by-page navigation under a paged table or list.",
+      "html": "<nav aria-label=\"Pagination\">\n  <ul class=\"pagination\">\n    <li class=\"page-item disabled\"><a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-disabled=\"true\">Previous</a></li>\n    <li class=\"page-item active\"><a class=\"page-link\" href=\"#\" aria-current=\"page\">1</a></li>\n    <li class=\"page-item\"><a class=\"page-link\" href=\"#\">2</a></li>\n    <li class=\"page-item\"><a class=\"page-link\" href=\"#\">3</a></li>\n    <li class=\"page-item\"><a class=\"page-link\" href=\"#\">Next</a></li>\n  </ul>\n</nav>"
+    },
+    {
+      "name": "Pagination footer toolbar",
+      "intent": "Full table footer with per-page selector, showing-text and the pagination control.",
+      "html": "<div class=\"pagination-footer\">\n  <div class=\"items-per-page\">\n    <label for=\"perPage\">Per page</label>\n    <select id=\"perPage\" class=\"form-select\">\n      <option>10</option>\n      <option>25</option>\n    </select>\n  </div>\n  <div class=\"showing-text\">Showing 1–10 of 240</div>\n  <div class=\"pagination-wrapper\">\n    <nav aria-label=\"Pagination\">\n      <ul class=\"pagination\">\n        <li class=\"page-item active\"><a class=\"page-link\" href=\"#\" aria-current=\"page\">1</a></li>\n        <li class=\"page-item\"><a class=\"page-link\" href=\"#\">2</a></li>\n      </ul>\n    </nav>\n  </div>\n</div>"
+    },
+    {
+      "name": "Dropdown menu",
+      "intent": "Toggle-revealed menu of actions or links.",
+      "html": "<div class=\"dropdown\">\n  <button type=\"button\" class=\"btn btn-outline-primary dropdown-toggle\" aria-expanded=\"false\" aria-haspopup=\"true\">Actions</button>\n  <ul class=\"dropdown-menu nav-dropdown\">\n    <li><a class=\"dropdown-item active\" href=\"#\" aria-current=\"true\">Edit</a></li>\n    <li><a class=\"dropdown-item\" href=\"#\">Duplicate</a></li>\n    <li><a class=\"dropdown-item\" href=\"#\">Delete</a></li>\n  </ul>\n</div>"
+    }
+  ],
+  "inference": [
+    { "when": ["top nav", "app bar", "header navigation", "main menu"], "use": { "variant": "navbar", "navbarExpand": "always" } },
+    { "when": ["sidebar", "side menu", "section navigation", "left nav"], "use": { "variant": "side-nav" } },
+    { "when": ["pager", "pagination", "page numbers", "next previous"], "use": { "variant": "pagination" } },
+    { "when": ["table footer", "rows per page", "showing x of y"], "use": { "variant": "pagination" } },
+    { "when": ["dropdown", "menu", "actions menu", "kebab menu", "more options"], "use": { "variant": "dropdown" } }
+  ]
+}

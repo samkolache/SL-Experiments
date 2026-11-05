@@ -1,0 +1,159 @@
+{
+  "id": "exos-modal",
+  "component": "Modal",
+  "element": "div",
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/bootstrap-theme/_modals.scss",
+      "src/scss/mixins/_modals.scss",
+      "bootstrap/scss/_modal.scss"
+    ]
+  },
+  "description": "Dialogs that overlay the page and demand a focused decision or task. Built on Bootstrap's modal structure (modal > modal-dialog > modal-content > header/body/footer). This theme restyles the chrome (rounded modal-content via radius-lg, soft box-shadow, white bg, generous 24px header/body/footer padding, 16px/700 title) and adds: a theme-specific modal-md size, an extra modal-xxl size (1400px), right/left slide-out panels (modal-slide-out + direction), and danger/warning header treatments (alert-modal / warning-modal). NOTE: a separate native-<dialog> 'fluid dialog' system (.dialog-fluid / .dialog-main / .dialog-content) also ships in this theme but is a distinct component, not a Bootstrap modal.",
+  "baseClass": "modal",
+  "tokens": {
+    "content-bg": "#ffffff",
+    "header-padding": "24px 24px 8px",
+    "body-padding": "8px 24px",
+    "footer-padding": "8px 24px 24px",
+    "title-font-size": "1rem",
+    "title-font-weight": 700,
+    "border-radius": "0.75rem",
+    "width-sm": "300px",
+    "width-md": "480px",
+    "width-lg": "800px",
+    "width-xl": "1140px",
+    "width-xxl": "1400px"
+  },
+  "rules": {
+    "always": [
+      "The dialog shell must be `<div class=\"modal\"> > <div class=\"modal-dialog\"> > <div class=\"modal-content\">`.",
+      "Place a size class (modal-sm/md/lg/xl/xxl) on the `modal-dialog` element.",
+      "Give the `modal-title` an id and point `aria-labelledby` on the `modal` (or modal-dialog) at it.",
+      "Footer actions use button classes from the Button catalog (btn btn-primary for the confirm, btn btn-secondary-text or btn-outline-primary for cancel)."
+    ],
+    "never": [
+      "Do not invent size classes beyond modal-sm/md/lg/xl/xxl.",
+      "Do not combine a slide-out (modal-slide-out) with a centered modal-dialog-centered — the slide-out variant already extends centering and overrides margins.",
+      "For a cautionary header treatment add `alert-modal` (danger header) or `warning-modal` (warning header) directly on the modal element — never both on the same modal.",
+      "Do not confuse the Bootstrap modal classes with the native-<dialog> .dialog-* fluid-dialog system; they are not interchangeable."
+    ]
+  },
+  "a11y": [
+    "Set role=\"dialog\" (or use the native dialog semantics) and aria-modal=\"true\" on the modal element.",
+    "Set aria-labelledby on the modal pointing at the id of the modal-title.",
+    "If there is descriptive body text, set aria-describedby pointing at the body content id.",
+    "On open, move focus into the dialog (first focusable control or the close button); trap focus within the dialog while it is open.",
+    "On close, return focus to the element that triggered the modal.",
+    "The dismiss control needs an accessible name (btn-close carries one via aria-label=\"Close\")."
+  ],
+  "axes": {
+    "size": {
+      "description": "Width of the modal-dialog. Placed on the modal-dialog element. modal-md and modal-xxl are theme additions; modal-sm/lg/xl are Bootstrap classes the theme also restyles.",
+      "type": "class",
+      "options": {
+        "sm": { "class": "modal-sm", "origin": "exos", "note": "~300px. Confirmations / short prompts." },
+        "md": { "class": "modal-md", "origin": "exos", "note": "~480px. Theme default size; theme-added class." },
+        "lg": { "class": "modal-lg", "origin": "exos", "note": "~800px." },
+        "xl": { "class": "modal-xl", "origin": "exos", "note": "~1140px." },
+        "xxl": { "class": "modal-xxl", "origin": "exos", "note": "~1400px (theme xxl breakpoint). Theme-added class." }
+      }
+    },
+    "position": {
+      "description": "Vertical placement / scroll behavior of the dialog.",
+      "type": "class",
+      "options": {
+        "top": null,
+        "centered": { "class": "modal-dialog-centered", "origin": "exos", "note": "Vertically centers the dialog in the viewport." },
+        "scrollable": { "class": "modal-dialog-scrollable", "origin": "exos", "note": "Constrains height and scrolls the modal-body instead of the page." }
+      }
+    },
+    "fluid": {
+      "description": "Edge-anchored slide-out panel. Add modal-slide-out on the modal element, then add the direction modifier modal-slide-out-right OR modal-slide-out-left (defined as chained selectors), plus the Bootstrap .slide class for the transition.",
+      "type": "class",
+      "options": {
+        "none": null,
+        "slideOut": { "class": "modal-slide-out", "origin": "exos", "note": "Full-height edge panel. Pair with the literal direction modifier `modal-slide-out-right` or `modal-slide-out-left` (and `slide`) on the same modal element." }
+      }
+    }
+  },
+  "structure": {
+    "root": {
+      "element": "div",
+      "class": "modal",
+      "note": "role=\"dialog\" aria-modal=\"true\" aria-labelledby=<title id>. Bootstrap toggles display via .show / fade.",
+      "slots": ["modal-dialog"]
+    },
+    "children": [
+      {
+        "element": "div",
+        "class": "modal-dialog",
+        "note": "Positioning shell. Add the size class (modal-sm/md/lg/xl/xxl) and optionally modal-dialog-centered / modal-dialog-scrollable here.",
+        "slots": ["modal-content"]
+      },
+      {
+        "element": "div",
+        "class": "modal-content",
+        "note": "The visible surface (rounded, shadowed, white).",
+        "slots": ["modal-header", "modal-body", "modal-footer"]
+      },
+      {
+        "element": "div",
+        "class": "modal-header",
+        "note": "Holds the title and dismiss control.",
+        "slots": ["modal-title", "btn-close"]
+      },
+      {
+        "element": "h5",
+        "class": "modal-title",
+        "note": "16px / 700. Needs an id referenced by aria-labelledby."
+      },
+      {
+        "element": "button",
+        "class": "btn-close",
+        "optional": true,
+        "note": "Bootstrap dismiss button; carries data-bs-dismiss=\"modal\" and aria-label=\"Close\"."
+      },
+      {
+        "element": "div",
+        "class": "modal-body",
+        "note": "Primary content region."
+      },
+      {
+        "element": "div",
+        "class": "modal-footer",
+        "optional": true,
+        "note": "Right-aligned action buttons. Add bottom-buttons-footer to left-align/compact the buttons.",
+        "slots": ["bottom-buttons-footer"]
+      }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Standard modal",
+      "intent": "Default confirm/cancel dialog with header title, dismiss, body and footer actions.",
+      "html": "<div class=\"modal\" id=\"confirmModal\" tabindex=\"-1\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"confirmModalTitle\">\n  <div class=\"modal-dialog modal-md\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\" id=\"confirmModalTitle\">Confirm changes</h5>\n        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n      </div>\n      <div class=\"modal-body\">\n        <p>Are you sure you want to save these changes?</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-secondary-text\" data-bs-dismiss=\"modal\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>\n      </div>\n    </div>\n  </div>\n</div>"
+    },
+    {
+      "name": "Centered confirmation",
+      "intent": "Small, vertically centered yes/no prompt.",
+      "html": "<div class=\"modal\" id=\"deleteModal\" tabindex=\"-1\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"deleteModalTitle\">\n  <div class=\"modal-dialog modal-sm modal-dialog-centered\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\" id=\"deleteModalTitle\">Delete item?</h5>\n        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n      </div>\n      <div class=\"modal-body\">\n        <p>This action cannot be undone.</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-secondary-text\" data-bs-dismiss=\"modal\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-danger\">Delete</button>\n      </div>\n    </div>\n  </div>\n</div>"
+    },
+    {
+      "name": "Alert (destructive) modal",
+      "intent": "Error / destructive confirmation with a danger-toned header and icon.",
+      "html": "<div class=\"modal alert-modal\" id=\"errorModal\" tabindex=\"-1\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"errorModalTitle\">\n  <div class=\"modal-dialog modal-md\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\" id=\"errorModalTitle\"><span class=\"icon-alert\" aria-hidden=\"true\"></span>Something went wrong</h5>\n        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n      </div>\n      <div class=\"modal-body\">\n        <p>We could not complete your request. Please try again.</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-primary\" data-bs-dismiss=\"modal\">Dismiss</button>\n      </div>\n    </div>\n  </div>\n</div>"
+    },
+    {
+      "name": "Right slide-out panel",
+      "intent": "Edge-anchored detail/edit panel that slides in from the right.",
+      "html": "<div class=\"modal modal-slide-out modal-slide-out-right slide\" id=\"detailPanel\" tabindex=\"-1\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"detailPanelTitle\">\n  <div class=\"modal-dialog modal-md\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\" id=\"detailPanelTitle\">Details</h5>\n        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n      </div>\n      <div class=\"modal-body\">\n        <p>Panel content.</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-secondary-text\" data-bs-dismiss=\"modal\">Close</button>\n        <button type=\"button\" class=\"btn btn-primary\">Apply</button>\n      </div>\n    </div>\n  </div>\n</div>"
+    }
+  ],
+  "inference": [
+    { "when": ["confirm", "are you sure", "save changes", "proceed"], "use": { "size": "md", "position": "centered" } },
+    { "when": ["details panel", "side panel", "edit drawer", "slide in"], "use": { "fluid": "slideOut" } },
+    { "when": ["wide", "table", "large form", "side by side"], "use": { "size": "xl" } }
+  ]
+}

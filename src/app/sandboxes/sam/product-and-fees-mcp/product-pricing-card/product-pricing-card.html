@@ -1,0 +1,65 @@
+<div class="card pricing-card">
+  <div class="card-header">
+    <h1>Confirm Products &amp; Pricing</h1>
+  </div>
+
+  <div class="card-body">
+    <!-- Existing Exos banner, new copy + attention icon -->
+    <div class="banner banner-primary pricing-banner" role="alert">
+      <span class="icon-attention-circle-fill" aria-hidden="true"></span>
+      <ol class="text">
+        <li><span class="fw-bold">The fees below have been pre-populated to reflect current competitive market rates.</span></li>
+        <li>Products will be considered <span class="fw-bold">quote-only</span> if you don’t assign fees.</li>
+        <li><span class="fw-bold">Uncheck</span> any products you do not wish to fulfill.</li>
+      </ol>
+    </div>
+
+    <!-- Fee grid. Each .pricing-group is display:contents at >=768px so its
+         cells join the parent grid; flipping grid-auto-flow transposes it. -->
+    <div class="pricing-scroll">
+      <div class="pricing-grid" role="table" aria-label="Product fees by county"
+           [style.--county-count]="counties.length">
+        <div class="pricing-group pricing-group--counties" role="rowgroup">
+          <div class="pricing-cell pricing-cell--head pricing-cell--corner" role="columnheader">
+            <span class="pricing-corner-label">Counties</span>
+          </div>
+          @for (county of counties; track county) {
+          <div class="pricing-cell pricing-cell--head pricing-cell--county" role="rowheader">{{ county }}</div>
+          }
+        </div>
+
+        @for (product of products; track product.key) {
+        <div class="pricing-group pricing-group--product" role="rowgroup">
+          <div class="pricing-cell pricing-cell--head pricing-cell--product" role="columnheader">
+            <input type="checkbox" class="form-check-input" checked [id]="'product-' + product.key" />
+            <div class="pricing-product-text">
+              <label class="pricing-product-name" [for]="'product-' + product.key">
+                {{ product.name }}<span class="icon-info-circle pricing-info" aria-hidden="true"></span>
+              </label>
+              <span class="pricing-product-desc">{{ product.description }}</span>
+            </div>
+          </div>
+
+          @for (county of counties; track county) {
+          <div class="pricing-cell pricing-cell--fee" role="cell">
+            <span class="pricing-fee-county" aria-hidden="true">{{ county }}</span>
+            <!-- Existing input-group/fee input, restyled -->
+            <div class="input-group pricing-fee-input">
+              <span class="input-group-text"><span class="icon-dollar" aria-hidden="true"></span></span>
+              <input type="number" class="form-control" min="0" step="0.01" [attr.max]="maxFeeAmount"
+                     [value]="defaultFee" [attr.aria-label]="product.name + ' fee, ' + county"
+                     (input)="onFeeInput($event)" (wheel)="$any($event.target).blur()" />
+            </div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn btn-outline-primary" type="button">BACK</button>
+    <button class="btn btn-primary" type="button">CONTINUE</button>
+  </div>
+</div>

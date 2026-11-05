@@ -1,0 +1,30 @@
+<!-- UI-only replica of VendorOnBoardingSpa's /onboarding/product-and-fees screen
+     (OnboardingLayoutComponent shell + MilestoneHeader + MilestoneSidebar + ProductAndFees).
+     The route flags are fixed to the Products & Fees state. -->
+<main class="layout-shell vob-pf-root is-product-fees">
+  <img src="assets/images/signup/sign-up-circle-bottom.svg"
+       alt=""
+       aria-hidden="true"
+       class="signup-circle-bottom" />
+
+  <img src="assets/images/signup/sign-up-circle.svg"
+       alt=""
+       aria-hidden="true"
+       class="signup-circle" />
+
+  <app-milestone-header class="layout-header" [steps]="steps" [activeIndex]="activeIndex"></app-milestone-header>
+
+  <div class="layout-body">
+    <div class="layout-container">
+      <!-- Only visible at >=1370, where the mocks replace the horizontal
+           milestone header with this column (see .layout-sidenav). -->
+      <div class="layout-sidenav">
+        <app-milestone-sidebar [steps]="sidebarSteps" [activeIndex]="activeIndex" />
+      </div>
+
+      <div class="layout-content">
+        <app-product-pricing-card></app-product-pricing-card>
+      </div>
+    </div>
+  </div>
+</main>

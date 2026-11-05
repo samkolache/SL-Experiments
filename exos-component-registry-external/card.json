@@ -1,0 +1,160 @@
+{
+  "id": "exos-card",
+  "component": "Card",
+  "element": "div",
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/bootstrap-theme/_cards.scss",
+      "src/scss/exos-theme/_cards.scss"
+    ]
+  },
+  "description": "Cards are bordered, white surface containers that group related content into header / body / footer regions. Unlike the alpaca theme (square corners, no shadow), this theme rounds the corners (radius-lg) and applies a soft gray drop shadow by default, with a 1px lighter-gray border. Body/header/footer padding is responsive (1.5rem at xxl, 1rem below).",
+  "baseClass": "card",
+  "tokens": {
+    "border-radius": "radius-lg",
+    "border": "1px solid border-default-lighter",
+    "background": "bg-default-primary",
+    "box-shadow": "0px 4px 6px bg-default-light",
+    "padding-y": "1.5rem (1rem below xxl)",
+    "padding-x": "1.5rem (1rem below xxl)"
+  },
+  "rules": {
+    "always": [
+      "Apply the base class `card` to the root container.",
+      "Place textual content inside a `card-body`; place captions in `card-header` / `card-footer`.",
+      "Use `card-title` for the heading element inside the body or header."
+    ],
+    "never": [
+      "Do not put body text directly on the `.card` root — wrap it in `card-body`.",
+      "Do not invent shadow/border modifier classes; the nested SCSS (e.g. card-shadow-*) is not exposed as a usable selector in this build.",
+      "Do not add a color modifier class to a card — this theme has no contextual card colors."
+    ]
+  },
+  "a11y": [
+    "Give a card a heading (e.g. card-title as an h2/h3) so assistive tech can navigate by structure.",
+    "If the whole card is clickable, wrap it in a single anchor or add a stretched link rather than nesting multiple interactive controls ambiguously."
+  ],
+  "axes": {
+    "region-padding": {
+      "description": "Responsive helpers that force a card to fill the column height at a breakpoint.",
+      "type": "class",
+      "options": {
+        "auto": null,
+        "fill-lg": { "class": "card-h-lg-100", "origin": "exos", "note": "min-height 500px, grows to 100% height at lg and up." },
+        "fill-xl": { "class": "card-h-xl-100", "origin": "exos", "note": "min-height 500px, grows to 100% height at xl and up." }
+      }
+    },
+    "scroll": {
+      "description": "Fixed-height scrolling card (e.g. a search/results panel).",
+      "type": "class",
+      "options": {
+        "none": null,
+        "search": { "class": "card-search", "origin": "exos", "note": "300px tall; its card-body scrolls vertically." }
+      }
+    }
+  },
+  "structure": {
+    "root": {
+      "element": "div",
+      "class": "card",
+      "slots": ["card-header", "card-primary-header", "card-body", "card-footer"]
+    },
+    "children": [
+      {
+        "element": "div",
+        "class": "card-header",
+        "optional": true,
+        "note": "Top cap with lighter-gray background; holds a title or navigation.",
+        "slots": ["card-title", "card-primary-navigation", "card-secondary-navigation"]
+      },
+      {
+        "element": "div",
+        "class": "card-primary-header",
+        "optional": true,
+        "note": "Header variant whose bottom border is removed so a contained card-primary-navigation owns the divider.",
+        "slots": ["card-title", "card-primary-navigation"]
+      },
+      {
+        "element": "ul",
+        "class": "card-primary-navigation",
+        "optional": true,
+        "note": "Tab strip (uses .nav .nav-item .nav-link). Add .vertical-tab for a vertical rail or .caps-tab for uppercase labels."
+      },
+      {
+        "element": "ul",
+        "class": "card-secondary-navigation",
+        "optional": true,
+        "note": "Segmented tab row with vertical dividers between items."
+      },
+      {
+        "element": "div",
+        "class": "card-body",
+        "note": "Primary content region.",
+        "slots": ["card-title", "card-subtitle", "card-text", "card-link"]
+      },
+      {
+        "element": "h3",
+        "class": "card-title",
+        "optional": true,
+        "note": "Heading, 1rem / normal weight in this theme."
+      },
+      {
+        "element": "h6",
+        "class": "card-subtitle",
+        "optional": true
+      },
+      {
+        "element": "p",
+        "class": "card-text",
+        "optional": true,
+        "repeatable": true
+      },
+      {
+        "element": "a",
+        "class": "card-link",
+        "optional": true,
+        "repeatable": true
+      },
+      {
+        "element": "div",
+        "class": "card-footer",
+        "optional": true,
+        "note": "Bottom cap with lighter-gray background; typically holds actions."
+      }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Basic content card",
+      "intent": "Group a heading and body copy in a surface container.",
+      "html": "<div class=\"card\">\n  <div class=\"card-body\">\n    <h3 class=\"card-title\">Account summary</h3>\n    <p class=\"card-text\">Your account is in good standing.</p>\n  </div>\n</div>"
+    },
+    {
+      "name": "Card with header and footer",
+      "intent": "A titled card with an action row at the bottom.",
+      "html": "<div class=\"card\">\n  <div class=\"card-header\">\n    <h3 class=\"card-title\">Payment method</h3>\n  </div>\n  <div class=\"card-body\">\n    <p class=\"card-text\">Visa ending in 4242.</p>\n  </div>\n  <div class=\"card-footer\">\n    <button type=\"button\" class=\"btn btn-outline-primary\">Edit</button>\n  </div>\n</div>"
+    },
+    {
+      "name": "Tabbed card",
+      "intent": "A card whose header hosts a primary tab navigation.",
+      "html": "<div class=\"card\">\n  <div class=\"card-primary-header\">\n    <ul class=\"card-primary-navigation nav\">\n      <li class=\"nav-item\"><a class=\"nav-link active\" href=\"#\">Overview</a></li>\n      <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\">History</a></li>\n    </ul>\n  </div>\n  <div class=\"card-body\">\n    <p class=\"card-text\">Overview content.</p>\n  </div>\n</div>"
+    },
+    {
+      "name": "Scrolling search panel",
+      "intent": "Fixed-height card whose body scrolls, e.g. live search results.",
+      "html": "<div class=\"card card-search\">\n  <div class=\"card-body\">\n    <p class=\"card-text\">Result 1</p>\n    <p class=\"card-text\">Result 2</p>\n  </div>\n</div>"
+    },
+    {
+      "name": "Full-height column card",
+      "intent": "Card that stretches to fill its grid column at large screens.",
+      "html": "<div class=\"card card-h-lg-100\">\n  <div class=\"card-body\">\n    <h3 class=\"card-title\">Details</h3>\n  </div>\n</div>"
+    }
+  ],
+  "inference": [
+    { "when": ["card", "panel", "container", "surface", "tile"], "use": { "region-padding": "auto" } },
+    { "when": ["search", "results list", "scrollable list", "live results"], "use": { "scroll": "search" } },
+    { "when": ["tabs", "tabbed card", "switch views in a card"], "use": { "region-padding": "auto" } },
+    { "when": ["equal height", "fill column", "match row height"], "use": { "region-padding": "fill-lg" } }
+  ]
+}

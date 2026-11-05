@@ -1,0 +1,369 @@
+@use '../../product-and-fees/styles/variables' as *;
+
+// Breakpoints from the Figma bands: <767 stacked, 767–933 transposed grid, >=933 grid.
+$bp-tablet: 768px;
+$bp-desktop: 933px;
+$mobile: '(max-width: #{$bp-tablet - 0.02px})';
+$tablet: '(min-width: #{$bp-tablet}) and (max-width: #{$bp-desktop - 0.02px})';
+$desktop: '(min-width: #{$bp-desktop})';
+
+// Grid measurements from the mocks
+$county-col-width: 134px;       // >=933: "Counties" column
+$product-col-width: 177px;      // 767–933: product label column
+$tablet-county-min: 134px;      // 767–933: narrowest county column before scrolling
+$fee-input-width: 101px;
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.card.pricing-card {
+  width: 100%;
+  margin: 0;
+  padding: 32px;
+  border: none;
+  border-radius: 12px;
+  background: $card-background-gradient;
+  box-shadow: $card-box-shadow;
+
+  @media #{$mobile} {
+    padding: 20px 16px;
+  }
+
+  .card-header {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 32px;
+
+    @media #{$mobile} {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 700;
+      letter-spacing: 0.45px;
+      color: $color-text-primary;
+
+      @media #{$mobile} {
+        font-size: 18px;
+        line-height: 27px;
+        letter-spacing: 0;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media #{$mobile} {
+      gap: 32px;
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+    padding: 20px 0 0;
+    background: transparent;
+    border-top: 1px solid $color-border-lighter;
+
+    .btn {
+      min-width: 125px;
+      height: 44px;
+    }
+
+    @media #{$mobile} {
+      flex-direction: column;
+      align-items: stretch;
+      margin-top: 32px;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ---- Banner (existing Exos .banner.banner-primary, restyled) ----
+.pricing-banner {
+  margin: 0;
+  align-items: flex-start;
+  border: 1px solid $color-action-primary;
+  border-radius: 5px;
+  background: $color-google-blue-light;
+  padding: 12px;
+
+  .icon-attention-circle-fill {
+    font-size: 20px;
+    margin-top: 2px;
+    color: $color-action-primary;
+  }
+
+  .text {
+    display: block;
+    margin: 0;
+    padding-left: 1.4em;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-text-secondary;
+  }
+}
+
+// ---- Fee grid ----
+.pricing-scroll {
+  border: 1px solid $color-border-light;
+  border-radius: 8px;
+  overflow: hidden;
+
+  @media #{$tablet} {
+    overflow-x: auto;
+  }
+
+  @media #{$mobile} {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+}
+
+.pricing-grid {
+  // The 1px gap over a border-coloured background draws every cell divider
+  // in both orientations without per-cell border rules.
+  display: grid;
+  gap: 1px;
+  background: $color-border-light;
+
+  @media #{$desktop} {
+    grid-auto-flow: column;
+    grid-template-rows: auto repeat(var(--county-count), 68px);
+    grid-template-columns: $county-col-width;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  @media #{$tablet} {
+    grid-auto-flow: row;
+    grid-template-columns: $product-col-width repeat(var(--county-count), minmax($tablet-county-min, 1fr));
+    grid-template-rows: 45px;
+    grid-auto-rows: 72px;
+    min-width: calc(#{$product-col-width} + var(--county-count) * #{$tablet-county-min + 1px});
+  }
+
+  @media #{$mobile} {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: none;
+  }
+}
+
+.pricing-group {
+  display: contents;
+
+  @media #{$mobile} {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &--counties {
+      display: none;
+    }
+
+    // Divider between product blocks, 32px either side
+    &--product + &--product {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid $color-border-lighter;
+    }
+  }
+}
+
+.pricing-cell {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  min-width: 0;
+  background: $color-surface-white;
+  font-size: 14px;
+  line-height: 21px;
+  color: $color-text-secondary;
+
+  &--head {
+    background: $color-surface-screen;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+  }
+
+  // County names are body cells at >=933 and header cells at 767–933
+  &--county {
+    @media #{$desktop} {
+      background: $color-surface-white;
+      font-size: 14px;
+      line-height: 21px;
+      font-weight: 400;
+    }
+
+    @media #{$tablet} {
+      justify-content: center;
+    }
+  }
+
+  &--corner .pricing-corner-label {
+    @media #{$tablet} {
+      display: none;
+    }
+  }
+
+  &--fee {
+    justify-content: center;
+  }
+
+  // 767–933: product label cells sit in the body, so they're white
+  &--product {
+    @media #{$tablet} {
+      background: $color-surface-white;
+    }
+  }
+
+  @media #{$mobile} {
+    padding: 0;
+    background: none;
+  }
+}
+
+// Product header cell: checkbox above name (>=933), beside name (<933)
+.pricing-cell--product {
+  gap: 8px;
+
+  .form-check-input {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  @media #{$desktop} {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  @media #{$mobile} {
+    align-items: flex-start;
+  }
+}
+
+.pricing-product-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pricing-product-name {
+  margin: 0;
+  cursor: pointer;
+  font-weight: 700;
+
+  @media #{$mobile} {
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+
+.pricing-info {
+  display: inline-block;
+  margin-left: 2px;
+  font-size: 14px;
+  vertical-align: -2px;
+  color: $color-action-primary;
+
+  @media #{$mobile} {
+    display: none;
+  }
+}
+
+.pricing-product-desc {
+  display: none;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 400;
+  color: $color-text-tertiary;
+
+  @media #{$mobile} {
+    display: block;
+  }
+}
+
+// County label repeated inside each fee cell, only visible when stacked
+.pricing-fee-county {
+  display: none;
+
+  @media #{$mobile} {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+// ---- Fee input (existing input-group + fee input, restyled to the mock) ----
+.pricing-fee-input {
+  flex: none;
+  flex-wrap: nowrap;
+  width: $fee-input-width;
+  height: 44px;
+
+  @media #{$mobile} {
+    width: 100px;
+  }
+
+  .input-group-text {
+    justify-content: center;
+    width: 36px;
+    padding: 0;
+    border: 1px solid $color-border-primary;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    background: $color-surface-light;
+    color: $color-text-primary;
+    font-size: 16px;
+  }
+
+  .form-control {
+    min-width: 0;
+    height: 44px;
+    padding: 10px 12px;
+    border: 1px solid $color-border-primary;
+    border-radius: 0 4px 4px 0;
+    background: $color-surface-white;
+    font-size: 16px;
+    color: $color-text-primary;
+    text-align: right;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      border-color: $color-action-primary;
+      box-shadow: $input-focus-box-shadow;
+      z-index: 1;
+    }
+  }
+}

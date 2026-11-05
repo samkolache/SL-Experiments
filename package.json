@@ -5,9 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:vercel": "ng build --output-path dist/sams-tests",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:local": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --port 58530"
+    "serve:local": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --port 58530",
+    "registry:check": "node exos-component-registry/scripts/check-drift.mjs",
+    "registry:check:external": "node exos-component-registry-external/scripts/check-drift.mjs --spa-root=."
   },
   "private": true,
   "dependencies": {
