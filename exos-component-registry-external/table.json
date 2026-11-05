@@ -1,0 +1,113 @@
+{
+  "id": "exos-table",
+  "component": "Table",
+  "element": "table",
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/exos-theme/_tables.scss",
+      "src/scss/bootstrap-theme/_pagination.scss"
+    ]
+  },
+  "description": "Tabular data display. Built on Bootstrap's `.table` (striped, hover, bordered, sized, responsive, active row) and extended by the exos theme: column headers render as small bold uppercase secondary text, first/last cells inherit the card horizontal spacing, plus exos-specific layouts `.table-all-side-bordered` (full grid border) and `.table-card-layout` (table rendered as a card surface with an absolutely-positioned caption and a `.btn-table-card-layout` action slot).",
+  "baseClass": "table",
+  "tokens": {
+    "header-color": "secondary",
+    "header-font-weight": 700,
+    "cell-vertical-align": "middle",
+    "first-last-cell-padding-x": "card-spacer-x"
+  },
+  "rules": {
+    "always": [
+      "Wrap a table in a `<div class=\"table-responsive\">` when it can overflow narrow viewports.",
+      "Use semantic <thead>, <tbody>, <th>, <td> elements; column headers go in <thead> as <th>."
+    ],
+    "never": [
+      "Do not apply the row-level `.table-active` class to a <table> element — it highlights a single <tr> or cell.",
+      "Do not hand-style header cells; the theme already renders <thead> th as small bold uppercase secondary text.",
+      "Do not use `striped-list`/`solid-list` here — those are list-group modifiers, not table classes."
+    ]
+  },
+  "a11y": [
+    "Give every column/row header a `scope` attribute (scope=\"col\" on <thead> th, scope=\"row\" on row-header th).",
+    "Provide a <caption> (or aria-label/aria-labelledby on the table) describing the table's contents; `.table-card-layout` styles the <caption> as the card title.",
+    "Keep data in real table semantics so screen readers announce row/column relationships."
+  ],
+  "axes": {
+    "striping": {
+      "description": "Zebra-stripe alternate rows for scan-ability.",
+      "type": "class",
+      "options": {
+        "none": null,
+        "rows": { "class": "table-striped", "origin": "exos", "note": "Bootstrap built-in; shades odd <tr>." },
+        "columns": { "class": "table-striped-columns", "origin": "exos", "note": "Bootstrap built-in; shades odd columns." }
+      }
+    },
+    "hover": {
+      "type": "class",
+      "options": {
+        "off": null,
+        "on": { "class": "table-hover", "origin": "exos", "note": "Bootstrap built-in; highlights the hovered row." }
+      }
+    },
+    "borders": {
+      "description": "Cell border treatment.",
+      "type": "class",
+      "options": {
+        "default": null,
+        "bordered": { "class": "table-bordered", "origin": "exos", "note": "Bootstrap built-in; borders on all sides of every cell." },
+        "borderless": { "class": "table-borderless", "origin": "exos", "note": "Bootstrap built-in; removes all cell borders." },
+        "all-side": { "class": "table-all-side-bordered", "origin": "exos", "note": "Exos-specific; adds left/right outer borders and a bottom border, building a fully enclosed grid." }
+      }
+    },
+    "density": {
+      "type": "class",
+      "options": {
+        "default": null,
+        "compact": { "class": "table-sm", "origin": "exos", "note": "Bootstrap built-in; halves cell padding." }
+      }
+    },
+    "layout": {
+      "description": "Surface treatment.",
+      "type": "class",
+      "options": {
+        "plain": null,
+        "card": { "class": "table-card-layout", "origin": "exos", "note": "Exos-specific; renders the table on a white card surface with shadow, an absolutely-positioned <caption> title and a `.btn-table-card-layout` top-right action slot." }
+      }
+    }
+  },
+  "structure": {
+    "root": { "element": "div", "class": "table-responsive", "optional": true, "note": "Optional scroll wrapper; omit for tables that always fit.", "slots": ["table"] },
+    "children": [
+      { "element": "table", "class": "table", "slots": ["caption", "thead", "tbody"] },
+      { "element": "caption", "class": null, "optional": true, "note": "Describes the table; styled as the title under `.table-card-layout`." },
+      { "element": "thead", "class": null, "slots": ["tr"] },
+      { "element": "tbody", "class": null, "slots": ["tr"] },
+      { "element": "tr", "class": null, "optional": true, "repeatable": true, "note": "Add `.table-active` to a single <tr> (or cell) to mark it selected/active.", "slots": ["th", "td"] }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Striped, hoverable table",
+      "intent": "Standard data table that is easy to scan and indicates the hovered row.",
+      "html": "<div class=\"table-responsive\">\n  <table class=\"table table-striped table-hover\">\n    <caption>Recent invoices</caption>\n    <thead>\n      <tr>\n        <th scope=\"col\">Invoice</th>\n        <th scope=\"col\">Vendor</th>\n        <th scope=\"col\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <th scope=\"row\">INV-1001</th>\n        <td>Acme Corp</td>\n        <td>$1,200.00</td>\n      </tr>\n      <tr class=\"table-active\">\n        <th scope=\"row\">INV-1002</th>\n        <td>Globex</td>\n        <td>$840.00</td>\n      </tr>\n    </tbody>\n  </table>\n</div>"
+    },
+    {
+      "name": "Fully bordered compact table",
+      "intent": "Dense grid where every cell needs a visible border.",
+      "html": "<table class=\"table table-all-side-bordered table-sm\">\n  <thead>\n    <tr>\n      <th scope=\"col\">Field</th>\n      <th scope=\"col\">Value</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th scope=\"row\">Status</th>\n      <td>Active</td>\n    </tr>\n  </tbody>\n</table>"
+    },
+    {
+      "name": "Card-layout table",
+      "intent": "Table that should read as a self-contained card with a title and a header action.",
+      "html": "<table class=\"table table-card-layout\">\n  <caption>Team members</caption>\n  <button type=\"button\" class=\"btn btn-primary-text btn-table-card-layout\">Add member</button>\n  <thead>\n    <tr>\n      <th scope=\"col\">Name</th>\n      <th scope=\"col\">Role</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Jordan Lee</td>\n      <td>Owner</td>\n    </tr>\n  </tbody>\n</table>"
+    }
+  ],
+  "inference": [
+    { "when": ["data table", "list of records", "rows", "grid of data"], "use": { "striping": "rows" } },
+    { "when": ["selectable rows", "interactive table", "clickable rows"], "use": { "hover": "on" } },
+    { "when": ["compact", "dense", "tight rows"], "use": { "density": "compact" } },
+    { "when": ["bordered grid", "all borders", "spreadsheet-like"], "use": { "borders": "all-side" } },
+    { "when": ["table inside a card", "card surface", "titled table with action"], "use": { "layout": "card" } }
+  ]
+}

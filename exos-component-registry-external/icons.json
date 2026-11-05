@@ -1,0 +1,65 @@
+{
+  "id": "exos-icon",
+  "component": "Icon",
+  "element": "span",
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/vendors/icomoon.scss",
+      "src/scss/_icons-uri.scss"
+    ]
+  },
+  "description": "Icon glyphs from the bundled 'icomoon' icon font. Every glyph is exposed as a class following the convention `icon-<name>` (e.g. icon-search, icon-edit). The shared selector `[class^=\"icon-\"], [class*=\" icon-\"]` applies the icomoon font-family and rendering, and each individual `.icon-<name>:before` injects the glyph via a content code point. Apply an icon class to an empty inline element (typically a <span> or <i>). There is no separate base class — the icon-* class is sufficient. The font ships HUNDREDS of glyphs; consult src/scss/vendors/icomoon.scss for the authoritative list rather than guessing names.",
+  "baseClass": null,
+  "tokens": {
+    "font-family": "icomoon",
+    "line-height": 1
+  },
+  "rules": {
+    "always": [
+      "Use the literal `icon-<name>` class for an existing glyph defined in icomoon.scss; the [class^=\"icon-\"] selector then supplies the font.",
+      "Place the icon on its own inline element (span or i) with no text content — the glyph comes from the ::before pseudo-element.",
+      "Many icons ship as an outline + a `-fill` solid pair (e.g. icon-bell / icon-bell-fill); pick the appropriate weight."
+    ],
+    "never": [
+      "Do not invent icon names — only classes literally present in icomoon.scss render a glyph.",
+      "Do not put visible text inside the icon element.",
+      "Do not omit accessibility handling (see a11y)."
+    ]
+  },
+  "a11y": [
+    "Decorative icons must be hidden from assistive tech with aria-hidden=\"true\".",
+    "An icon that is the only content of an interactive control (icon-only button/link) needs an accessible name via aria-label on the control.",
+    "A meaningful standalone icon should provide a text alternative (e.g. role=\"img\" + aria-label)."
+  ],
+  "axes": {
+    "glyph": {
+      "description": "The specific icon. Convention: `icon-<name>`. Options below are a representative SAMPLE verified against icomoon.scss — the full set lives in the source file. Names map 1:1 to a glyph; append `-fill` for the solid variant where one exists.",
+      "type": "class",
+      "options": {
+        "search": { "class": "icon-search", "origin": "exos" },
+        "edit": { "class": "icon-edit", "origin": "exos" },
+        "check": { "class": "icon-check", "origin": "exos" },
+        "trash": { "class": "icon-trash", "origin": "exos" },
+        "bell": { "class": "icon-bell", "origin": "exos" },
+        "download": { "class": "icon-download", "origin": "exos" }
+      }
+    }
+  },
+  "structure": null,
+  "examples": [
+    { "name": "Decorative inline icon", "intent": "An icon that only reinforces adjacent text.", "html": "<span class=\"icon-search\" aria-hidden=\"true\"></span>" },
+    { "name": "Icon inside a button", "intent": "Glyph paired with an accessible control name on the parent.", "html": "<button type=\"button\" class=\"btn btn-primary\"><span class=\"icon-download\" aria-hidden=\"true\"></span> Download</button>" },
+    { "name": "Meaningful standalone icon", "intent": "Icon conveying status with no accompanying text.", "html": "<span class=\"icon-check\" role=\"img\" aria-label=\"Completed\"></span>" },
+    { "name": "Edit affordance", "intent": "Inline edit trigger glyph.", "html": "<span class=\"icon-edit\" aria-hidden=\"true\"></span>" },
+    { "name": "Notification bell", "intent": "Header notifications indicator.", "html": "<span class=\"icon-bell\" aria-hidden=\"true\"></span>" }
+  ],
+  "inference": [
+    { "when": ["search", "find", "lookup"], "use": { "glyph": "search" } },
+    { "when": ["edit", "pencil", "modify"], "use": { "glyph": "edit" } },
+    { "when": ["delete", "remove", "trash"], "use": { "glyph": "trash" } },
+    { "when": ["download", "export", "save file"], "use": { "glyph": "download" } },
+    { "when": ["notification", "alert", "bell"], "use": { "glyph": "bell" } },
+    { "when": ["done", "success", "confirm", "checkmark"], "use": { "glyph": "check" } }
+  ]
+}

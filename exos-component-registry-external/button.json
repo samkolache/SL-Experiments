@@ -1,0 +1,90 @@
+{
+  "id": "exos-button",
+  "component": "Button",
+  "element": "button",
+  "source": {
+    "package": "@exos/exos-theme-external",
+    "scss": [
+      "src/scss/bootstrap-theme/_buttons.scss",
+      "src/scss/exos-theme/_buttons.scss",
+      "src/scss/mixins/_buttons.scss"
+    ]
+  },
+  "description": "Buttons trigger a single action on click. This theme restyles Bootstrap buttons (4px radius, uppercase, 700 weight, inline-flex with gap) and adds text, icon, and cross-card variants. Note: unlike the alpaca theme, corners are rounded (radius-4) and the primary/success fills use action-color tokens / gradients.",
+  "baseClass": "btn",
+  "tokens": {
+    "border-radius": "0.25rem",
+    "text-transform": "uppercase",
+    "font-weight": 700,
+    "font-size": "0.75rem",
+    "letter-spacing": "0.075rem",
+    "gap": "0.5rem"
+  },
+  "rules": {
+    "always": [
+      "Every button element must include a type attribute (button | submit | reset).",
+      "The base class `btn` is required on every variant."
+    ],
+    "never": [
+      "Do not combine two color/style modifiers (e.g. `btn-primary btn-outline-primary`).",
+      "Do not use a CSS class for the disabled state — use the `disabled` HTML attribute.",
+      "Do not omit `aria-label` on icon-only buttons."
+    ]
+  },
+  "a11y": [
+    "Icon-only buttons (btn-icon*) have no visible text, so they require an aria-label describing the action.",
+    "Decorative icon glyphs inside a button should be marked aria-hidden=\"true\"."
+  ],
+  "axes": {
+    "style": {
+      "description": "Visual emphasis / treatment.",
+      "type": "class",
+      "options": {
+        "solid":  { "pattern": "btn-{color}",         "colors": ["primary", "secondary", "success", "danger", "warning", "dark"], "origin": "bootstrap", "note": "Filled. Highest emphasis — primary CTA. success uses a gradient fill." },
+        "outline":{ "pattern": "btn-outline-{color}",  "colors": ["primary", "secondary", "success", "danger", "warning"], "origin": "exos", "note": "Bordered, transparent. Medium emphasis — secondary action." },
+        "text":   { "pattern": "btn-{color}-text",     "colors": ["primary", "secondary", "success", "danger", "warning"], "origin": "exos", "note": "No border/background. Lowest emphasis — tertiary action." },
+        "icon":   { "pattern": "btn-icon btn-icon-{color}-{tone}", "colors": ["primary", "success", "danger", "secondary"], "tones": ["lighter", "text"], "origin": "exos", "note": "Circular icon-only button. Requires aria-label." },
+        "link":   { "class": "btn-link", "origin": "bootstrap", "note": "Renders as an inline link; stock Bootstrap." }
+      }
+    },
+    "size": {
+      "type": "class",
+      "options": {
+        "sm": { "class": "btn-sm", "origin": "exos" },
+        "md": null,
+        "lg": { "class": "btn-lg", "origin": "exos" }
+      }
+    },
+    "width": {
+      "description": "Optional fixed minimum width.",
+      "type": "class",
+      "options": {
+        "auto": null,
+        "sm": { "class": "btn-width-sm", "origin": "exos" },
+        "lg": { "class": "btn-width-lg", "origin": "exos" }
+      }
+    },
+    "state": {
+      "type": "attribute",
+      "options": {
+        "default": null,
+        "disabled": { "attribute": "disabled" }
+      }
+    }
+  },
+  "structure": null,
+  "examples": [
+    { "name": "Primary CTA", "intent": "Main call-to-action on a form or screen.", "html": "<button type=\"submit\" class=\"btn btn-primary\">Continue</button>" },
+    { "name": "Secondary action", "intent": "A second action sitting beside a primary button.", "html": "<button type=\"button\" class=\"btn btn-outline-primary\">Save draft</button>" },
+    { "name": "Tertiary / cancel", "intent": "Low-emphasis dismissive action.", "html": "<button type=\"button\" class=\"btn btn-secondary-text\">Cancel</button>" },
+    { "name": "Destructive", "intent": "Delete or other irreversible action.", "html": "<button type=\"button\" class=\"btn btn-danger\">Delete</button>" },
+    { "name": "Icon button", "intent": "Compact icon-only action, e.g. in a toolbar.", "html": "<button type=\"button\" class=\"btn btn-icon btn-icon-primary-lighter\" aria-label=\"Edit\"><span class=\"icon-edit\" aria-hidden=\"true\"></span></button>" },
+    { "name": "Disabled", "intent": "Action not currently available.", "html": "<button type=\"button\" class=\"btn btn-primary\" disabled>Continue</button>" }
+  ],
+  "inference": [
+    { "when": ["submit", "save", "confirm", "continue", "next", "apply"], "use": { "style": "solid", "color": "primary" } },
+    { "when": ["cancel", "dismiss", "back", "close", "reset"], "use": { "style": "text", "color": "secondary" } },
+    { "when": ["delete", "remove", "reject", "discard"], "use": { "style": "solid", "color": "danger" } },
+    { "when": ["second button beside a primary"], "use": { "style": "outline", "color": "primary" } }
+  ]
+}
