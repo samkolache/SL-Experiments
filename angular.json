@@ -27,7 +27,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "*/products-pricing-card-report.html",
+                "input": "reports",
+                "output": "reports"
+              }
             ],
             "styles": [
               "src/styles.scss",
@@ -135,7 +140,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "*/products-pricing-card-report.html",
+                "input": "reports",
+                "output": "reports"
+              }
             ],
             "styles": [
               "src/styles.scss",
